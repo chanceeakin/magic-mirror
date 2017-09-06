@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
 func main() {
-	fs := http.FileServer(http.Dir("../../client/build/"))
-	http.Handle("/", fs)
+	router := NewRouter()
 	fmt.Println("Listening on 8080")
-	http.ListenAndServe(":8080", nil)
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
