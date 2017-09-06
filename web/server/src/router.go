@@ -20,6 +20,7 @@ func NewRouter() *mux.Router {
 			Handler(handler)
 
 	}
+	r.PathPrefix("/graphiql").Handler(http.FileServer(http.Dir("static")))
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./../../client/build/")))
 	http.Handle("/", r)
 	return r

@@ -1,4 +1,4 @@
-package graphql
+package main
 
 import (
 	"github.com/graphql-go/graphql"
@@ -38,15 +38,10 @@ func GraphQL(w http.ResponseWriter, r *http.Request) {
 
 	// create a graphl-go HTTP handler with our previously defined schema
 	// and we also set it to return pretty JSON output
-	h := handler.New(&handler.Config{
+	handler.New(&handler.Config{
 		Schema: &schema,
 		Pretty: true,
 	})
-	fs := http.FileServer(http.Dir("../static"))
-
-	// serve a GraphQL endpoint at `/graphql`
-	http.Handle("/graphql", h)
-	http.Handle("/graphiql", fs)
 
 	// and serve!
 }
