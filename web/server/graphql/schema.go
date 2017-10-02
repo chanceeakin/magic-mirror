@@ -1,4 +1,4 @@
-package graphqlPkg
+package graphql
 
 // Schema is the graphql schema in text form.
 var Schema = `

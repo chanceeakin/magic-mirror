@@ -1,4 +1,4 @@
-package graphqlPkg
+package graphql
 
 // Page is boilerplate for graphql
 var Page = []byte(`
