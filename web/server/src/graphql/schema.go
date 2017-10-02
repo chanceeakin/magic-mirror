@@ -1,5 +1,6 @@
-package main
+package graphqlPkg
 
+// Schema is the graphql schema in text form.
 var Schema = `
 	schema {
 		query: Query
