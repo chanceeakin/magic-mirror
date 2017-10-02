@@ -17,12 +17,12 @@ func init() {
 }
 
 func main() {
-	http.Handle("/graphql", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	http.Handle("/graphiql", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(gql.Page)
 	}))
 
-	http.Handle("/query", &relay.Handler{Schema: schema})
+	http.Handle("/graphql", &relay.Handler{Schema: schema})
 	http.Handle("/", http.FileServer(http.Dir("./../client/build/")))
-	fmt.Println("listening on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Println("listening on :8000")
+	log.Fatal(http.ListenAndServe(":8000", nil))
 }
