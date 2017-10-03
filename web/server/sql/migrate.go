@@ -1,6 +1,7 @@
 package sql
 
 // import migrate "github.com/rubenv/sql-migrate"
+
 //
 // // Hardcoded strings in memory:
 // migrations := &migrate.MemoryMigrationSource{
@@ -14,9 +15,11 @@ package sql
 // }
 
 // OR: Read migrations from a folder:
-// migrations := &migrate.FileMigrationSource{
-//     Dir: "db/migrations",
+// Migrations provides a migration source for database migration
+// var Migrations = &migrate.FileMigrationSource{
+// 	Dir: "db/migrations",
 // }
+
 //
 // // OR: Use migrations from bindata:
 // migrations := &migrate.AssetMigrationSource{

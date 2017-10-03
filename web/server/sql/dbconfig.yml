@@ -1,0 +1,5 @@
+development:
+    dialect: mysql
+    datasource: golangTest:thisisatest@/golangtest
+    dir: migrations/mysql
+    table: migrations

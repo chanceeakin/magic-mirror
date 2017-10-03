@@ -67,7 +67,8 @@ func Signup(res http.ResponseWriter, req *http.Request) {
 
 	username := req.FormValue("username")
 	password := req.FormValue("password")
-	fmt.Print(username, password)
+	email := req.FormValue("email")
+	fmt.Print(username, password, email)
 
 	var user string
 
@@ -82,7 +83,7 @@ func Signup(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		_, err = db.Exec("INSERT INTO users(username, password) VALUES(?, ?)", username, hashedPassword)
+		_, err = db.Exec("INSERT INTO users(username, password, email) VALUES(?, ?, ?)", username, hashedPassword, email)
 		if err != nil {
 			http.Error(res, "Server error, unable to create your account.", 500)
 			return
