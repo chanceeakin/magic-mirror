@@ -27,15 +27,20 @@ export const handleSubmit = payload => {
     dispatch({
       type: LOGIN_CHECK
     })
+    console.log(payload)
     try {
       const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
-        body: {
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({
           username: payload.username,
           password: payload.password
-        }
+        })
       })
       const json = await response.json()
+      console.log(json)
       await dispatch(successfulRequest(json.data))
     } catch (err) {
       return dispatch(failedRequest(err))
