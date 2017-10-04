@@ -1,4 +1,4 @@
-// Package starwars provides a example schema and resolver based on Star Wars characters.
+// Package graphql starwars provides a example schema and resolver based on Star Wars characters.
 //
 // Source: https://github.com/graphql/graphql.github.io/blob/source/site/_core/swapiSchema.js
 package graphql
@@ -20,6 +20,30 @@ type human struct {
 	Height    float64
 	Mass      int
 	Starships []graphql.ID
+}
+
+type user struct {
+	ID       graphql.ID
+	username string
+	password string
+	email    string
+}
+
+var users = []*user{
+	{
+		ID:       "1",
+		username: "Chance",
+		password: "shhh",
+		email:    "fake@fakeyfake.com",
+	},
+}
+
+var userData = make(map[graphql.ID]*user)
+
+func init() {
+	for _, u := range users {
+		userData[u.ID] = u
+	}
 }
 
 var humans = []*human{
@@ -211,6 +235,13 @@ func (r *Resolver) Human(args struct{ ID graphql.ID }) *humanResolver {
 	return nil
 }
 
+func (r *Resolver) User(args struct{ ID graphql.ID }) *userResolver {
+	if u := userData[args.ID]; u != nil {
+		return &userResolver{u}
+	}
+	return nil
+}
+
 func (r *Resolver) Droid(args struct{ ID graphql.ID }) *droidResolver {
 	if d := droidData[args.ID]; d != nil {
 		return &droidResolver{d}
@@ -266,6 +297,26 @@ func (r *characterResolver) ToDroid() (*droidResolver, bool) {
 
 type humanResolver struct {
 	h *human
+}
+
+type userResolver struct {
+	u *user
+}
+
+func (r *userResolver) ID() graphql.ID {
+	return r.u.ID
+}
+
+func (r *userResolver) Username() string {
+	return r.u.username
+}
+
+func (r *userResolver) Email() string {
+	return r.u.email
+}
+
+func (r *userResolver) Password() string {
+	return r.u.password
 }
 
 func (r *humanResolver) ID() graphql.ID {

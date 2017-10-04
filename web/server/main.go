@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	gql "github.com/chanceeakin/magic-mirror/web/server/graphql"
+	api "github.com/chanceeakin/magic-mirror/web/server/sql"
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
 )
@@ -20,7 +21,8 @@ func main() {
 	http.Handle("/graphiql", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(gql.Page)
 	}))
-
+	http.HandleFunc("/api/signup", api.Signup)
+	http.HandleFunc("/api/login", api.Login)
 	http.Handle("/graphql", &relay.Handler{Schema: schema})
 	http.Handle("/", http.FileServer(http.Dir("./../client/build/")))
 	fmt.Println("listening on :8000")

@@ -9,6 +9,7 @@ var Schema = `
 	# The query type, represents all of the entry points into our object graph
 	type Query {
 		hello: String!
+		user(id: ID!): User
 		hero(episode: Episode = NEWHOPE): Character
 		reviews(episode: Episode!): [Review]!
 		search(text: String!): [SearchResult]!
@@ -51,6 +52,12 @@ var Schema = `
 		FOOT
 	}
 	# A humanoid creature from the Star Wars universe
+	type User {
+		id: ID!
+		username: String!
+		email: String!
+		password: String!
+	}
 	type Human implements Character {
 		# The ID of the human
 		id: ID!

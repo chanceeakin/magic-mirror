@@ -1,0 +1,5 @@
+export const DIALOG_SHOW = 'app/DIALOG_SHOW'
+export const DIALOG_HIDE = 'app/DIALOG_HIDE'
+export const LOGIN_CHECK = 'app/LOGIN_CHECK'
+export const LOGIN_SUCCESS = 'app/LOGIN_SUCCESS'
+export const LOGIN_FAIL = 'app/LOGIN_FAIL'
