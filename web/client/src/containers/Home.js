@@ -6,28 +6,26 @@ import {withRouter} from 'react-router'
 
 import {withTheme, withStyles} from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
-import Dialog, {
-  DialogTitle
-} from 'material-ui/Dialog'
-import Button from 'material-ui/Button'
 import Grid from 'material-ui/Grid'
 
 import {
-  showDialog,
-  hideDialog,
   handleSubmit
 } from './../actions/app'
-import logo from './logo.svg'
+import {
+  signUpPage
+} from './../actions/nav'
+
 import LoginForm from './../components/Login-Form'
+import mp4 from './../constants/videos/Perfect_Hour.mp4'
+import webm from './../constants/videos/Perfect_Hour.webm'
 
 const mapStateToProps = state => ({
   isDialogOpen: state.app.isDialogOpen
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  showDialog,
-  hideDialog,
-  handleSubmit
+  handleSubmit,
+  signUpPage
 }, dispatch)
 
 const styles = theme => ({
@@ -42,8 +40,21 @@ const styles = theme => ({
   header: {
     padding: '20px'
   },
+  hero: {
+    color: theme.palette.primary[50]
+  },
   intro: {
     fontSize: 'large'
+  },
+  video: {
+    position: 'fixed',
+    right: 0,
+    bottom: 0,
+    minWidth: '100%',
+    minHeight: '100%',
+    width: 'auto',
+    height: 'auto',
+    zIndex: '-100'
   },
   button: {
     margin: '1em',
@@ -68,10 +79,8 @@ export default class Home extends Component {
   static displayName = 'Login'
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    isDialogOpen: PropTypes.bool.isRequired,
-    showDialog: PropTypes.func.isRequired,
-    hideDialog: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired
+    handleSubmit: PropTypes.func.isRequired,
+    signUpPage: PropTypes.func.isRequired
   }
 
   render () {
@@ -80,34 +89,23 @@ export default class Home extends Component {
       <Grid
         container
         className={classes.root}
+        spacing={0}
       >
-        <Dialog
-          open={this.props.isDialogOpen}
-          onRequestClose={this.props.hideDialog}
-        >
-          <DialogTitle>
-            Dialog!
-          </DialogTitle>
-        </Dialog>
         <Grid
           item
           className={classes.header}
           xs={12}
         >
-          <img src={logo} className={classes.logo} alt='logo' />
-          <Typography type='display4'>Magic Mirror</Typography>
+          <video autoPlay loop className={classes.video}>
+            <source src={mp4} type='video/mp4' />
+            <source src={webm} type='video/webm' />
+          </video>
+          <Typography type='display4' className={classes.hero}>Magic Mirror</Typography>
         </Grid>
         <Grid item xs={12}>
-          <Button
-            raised
-            className={classes.button}
-            color='primary'
-            onTouchTap={() => this.props.showDialog()}
-          >
-            Click me!
-          </Button>
           <LoginForm
             onSubmit={this.props.handleSubmit}
+            signUpPage={this.props.signUpPage}
           />
         </Grid>
       </Grid>

@@ -10,7 +10,7 @@ import {
   showDialog,
   hideDialog
 } from './../actions/app'
-import AppBar from './../components/App-Bar'
+// import AppBar from './../components/App-Bar'
 
 const mapStateToProps = state => ({
   isDialogOpen: state.app.isDialogOpen
@@ -70,7 +70,7 @@ export default class App extends Component {
     const {classes} = this.props
     return (
       <div className={classes.app}>
-        <AppBar />
+        {/* <AppBar /> */}
         <main>
           <Routes />
         </main>

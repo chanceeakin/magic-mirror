@@ -40,7 +40,6 @@ export const handleSubmit = payload => {
         })
       })
       const json = await response.json()
-      console.log(json)
       await dispatch(successfulRequest(json.data))
     } catch (err) {
       return dispatch(failedRequest(err))
