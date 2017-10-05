@@ -9,15 +9,16 @@ import Typography from 'material-ui/Typography'
 import Grid from 'material-ui/Grid'
 
 import {
-  handleSubmit
+  handleSignupSubmit
 } from './../actions/app'
+import SignupForm from './../components/Signup-Form'
 
 const mapStateToProps = state => ({
   isDialogOpen: state.app.isDialogOpen
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  handleSubmit
+  handleSignupSubmit
 }, dispatch)
 
 const styles = theme => ({
@@ -26,7 +27,7 @@ const styles = theme => ({
     margin: 0
   },
   header: {
-    padding: '20px'
+    padding: '3em'
   },
   hero: {
     color: theme.palette.text.primary
@@ -43,7 +44,8 @@ const styles = theme => ({
 export default class Signup extends Component {
   static displayName = 'Signup'
   static propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    handleSignupSubmit: PropTypes.func.isRequired
   }
 
   render () {
@@ -61,7 +63,11 @@ export default class Signup extends Component {
         >
           <Typography type='display4' className={classes.hero}>Sign Up</Typography>
         </Grid>
-        <Grid item xs={12} />
+        <Grid item xs={12}>
+          <SignupForm
+            handleSubmit={this.props.handleSignupSubmit}
+          />
+        </Grid>
       </Grid>
     )
   }

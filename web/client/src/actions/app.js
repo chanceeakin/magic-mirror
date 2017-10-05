@@ -3,7 +3,10 @@ import {
   DIALOG_SHOW,
   LOGIN_CHECK,
   LOGIN_SUCCESS,
-  LOGIN_FAIL
+  LOGIN_FAIL,
+  SIGNUP_CHECK,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAIL
 } from './../constants/action-types'
 
 export const showDialog = () => {
@@ -22,7 +25,33 @@ export const hideDialog = () => {
   }
 }
 
-export const handleSubmit = payload => {
+export const handleSignupSubmit = payload => {
+  return async (dispatch) => {
+    dispatch({
+      type: SIGNUP_CHECK
+    })
+    console.log(payload)
+    try {
+      const response = await fetch(`${process.env.PUBLIC_URL}/api/signup`, {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({
+          username: payload.username,
+          email: payload.email,
+          password: payload.password
+        })
+      })
+      const json = await response.json()
+      await dispatch(successfulSignup(json.data))
+    } catch (err) {
+      return dispatch(failedSignup(err))
+    }
+  }
+}
+
+export const handleLoginSubmit = payload => {
   return async (dispatch) => {
     dispatch({
       type: LOGIN_CHECK
@@ -40,14 +69,32 @@ export const handleSubmit = payload => {
         })
       })
       const json = await response.json()
-      await dispatch(successfulRequest(json.data))
+      await dispatch(successfulLogin(json.data))
     } catch (err) {
-      return dispatch(failedRequest(err))
+      return dispatch(failedLogin(err))
     }
   }
 }
 
-const successfulRequest = payload => {
+const successfulSignup = payload => {
+  return dispatch => {
+    dispatch({
+      type: SIGNUP_SUCCESS,
+      payload
+    })
+  }
+}
+
+const failedSignup = payload => {
+  return dispatch => {
+    dispatch({
+      type: SIGNUP_FAIL,
+      payload
+    })
+  }
+}
+
+const successfulLogin = payload => {
   return dispatch => {
     dispatch({
       type: LOGIN_SUCCESS,
@@ -56,7 +103,7 @@ const successfulRequest = payload => {
   }
 }
 
-const failedRequest = payload => {
+const failedLogin = payload => {
   return dispatch => {
     dispatch({
       type: LOGIN_FAIL,

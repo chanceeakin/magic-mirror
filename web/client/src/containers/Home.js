@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography'
 import Grid from 'material-ui/Grid'
 
 import {
-  handleSubmit
+  handleLoginSubmit
 } from './../actions/app'
 import {
   signUpPage
@@ -24,7 +24,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  handleSubmit,
+  handleLoginSubmit,
   signUpPage
 }, dispatch)
 
@@ -79,7 +79,7 @@ export default class Home extends Component {
   static displayName = 'Login'
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
+    handleLoginSubmit: PropTypes.func.isRequired,
     signUpPage: PropTypes.func.isRequired
   }
 
@@ -104,7 +104,7 @@ export default class Home extends Component {
         </Grid>
         <Grid item xs={12}>
           <LoginForm
-            onSubmit={this.props.handleSubmit}
+            onSubmit={this.props.handleLoginSubmit}
             signUpPage={this.props.signUpPage}
           />
         </Grid>

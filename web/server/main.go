@@ -2,29 +2,12 @@ package main
 
 import (
 	"fmt"
+	router "github.com/chanceeakin/magic-mirror/web/server/router"
 	"log"
-	"net/http"
-
-	gql "github.com/chanceeakin/magic-mirror/web/server/graphql"
-	api "github.com/chanceeakin/magic-mirror/web/server/sql"
-	"github.com/neelance/graphql-go"
-	"github.com/neelance/graphql-go/relay"
 )
 
-var schema *graphql.Schema
-
-func init() {
-	schema = graphql.MustParseSchema(gql.Schema, &gql.Resolver{})
-}
-
 func main() {
-	http.Handle("/graphiql", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write(gql.Page)
-	}))
-	http.HandleFunc("/api/signup", api.Signup)
-	http.HandleFunc("/api/login", api.Login)
-	http.Handle("/graphql", &relay.Handler{Schema: schema})
-	http.Handle("/", http.FileServer(http.Dir("./../client/build/")))
+	r := router.NewRouter()
 	fmt.Println("listening on :8000")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	log.Fatal(r.ListenAndServe())
 }

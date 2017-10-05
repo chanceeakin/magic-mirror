@@ -8,16 +8,11 @@ import {withTheme, withStyles} from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
 import Grid from 'material-ui/Grid'
 
-import {
-  handleSubmit
-} from './../actions/app'
-
 const mapStateToProps = state => ({
   isDialogOpen: state.app.isDialogOpen
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  handleSubmit
 }, dispatch)
 
 const styles = theme => ({
