@@ -30,7 +30,6 @@ export const handleSignupSubmit = payload => {
     dispatch({
       type: SIGNUP_CHECK
     })
-    console.log(payload)
     try {
       const response = await fetch(`${process.env.PUBLIC_URL}/api/signup`, {
         method: 'POST',
@@ -44,7 +43,7 @@ export const handleSignupSubmit = payload => {
         })
       })
       const json = await response.json()
-      await dispatch(successfulSignup(json.data))
+      await dispatch(successfulSignup(json))
     } catch (err) {
       return dispatch(failedSignup(err))
     }
@@ -56,7 +55,6 @@ export const handleLoginSubmit = payload => {
     dispatch({
       type: LOGIN_CHECK
     })
-    console.log(payload)
     try {
       const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
@@ -65,11 +63,13 @@ export const handleLoginSubmit = payload => {
         }),
         body: JSON.stringify({
           username: payload.username,
+          email: payload.email,
           password: payload.password
         })
       })
-      const json = await response.json()
-      await dispatch(successfulLogin(json.data))
+      const res = await response
+      const json = await res.json()
+      await dispatch(successfulLogin(json))
     } catch (err) {
       return dispatch(failedLogin(err))
     }
@@ -77,6 +77,7 @@ export const handleLoginSubmit = payload => {
 }
 
 const successfulSignup = payload => {
+  console.log(payload)
   return dispatch => {
     dispatch({
       type: SIGNUP_SUCCESS,
@@ -86,6 +87,7 @@ const successfulSignup = payload => {
 }
 
 const failedSignup = payload => {
+  console.log(payload)
   return dispatch => {
     dispatch({
       type: SIGNUP_FAIL,
@@ -95,6 +97,7 @@ const failedSignup = payload => {
 }
 
 const successfulLogin = payload => {
+  console.log(payload)
   return dispatch => {
     dispatch({
       type: LOGIN_SUCCESS,

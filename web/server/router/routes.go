@@ -23,6 +23,7 @@ func NewRouter() *http.Server {
 	router.HandleFunc("/api/signup", Signup)
 	router.HandleFunc("/api/login", Login)
 	router.Handle("/graphql", &relay.Handler{Schema: schema})
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./../client/build/")))
 
 	srv := &http.Server{
 		Handler: router,

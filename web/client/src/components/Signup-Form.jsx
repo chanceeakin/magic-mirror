@@ -7,6 +7,7 @@ import Button from 'material-ui/Button'
 import Card, {
   CardContent
 } from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
 
 import TextFieldComponent from './Login-Text-Field'
 
@@ -14,7 +15,7 @@ const styles = theme => ({
   root: {
     maxWidth: '500px',
     margin: '5em auto 0 auto',
-    background: theme.palette.secondary[200]
+    background: theme.palette.secondary[50]
   },
   buttonContainer: {
     padding: '1em'
@@ -63,7 +64,7 @@ function SignupForm (props) {
               color='primary'
               raised
             >
-              Login
+              Sign Up
             </Button>
             <Button
               type='button'
@@ -74,6 +75,10 @@ function SignupForm (props) {
             </Button>
           </div>
         </form>
+        <a
+          onTouchTap={() => props.homePage()}
+          className={props.classes.link}
+        ><Typography>Home</Typography></a>
       </CardContent>
     </Card>
   )
@@ -85,7 +90,8 @@ SignupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   reset: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired
+  submitting: PropTypes.bool.isRequired,
+  homePage: PropTypes.func.isRequired
 }
 
 export default withStyles(styles)(reduxForm({

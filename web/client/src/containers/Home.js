@@ -38,7 +38,7 @@ const styles = theme => ({
     height: '80px'
   },
   header: {
-    padding: '20px'
+    padding: '3em'
   },
   hero: {
     color: theme.palette.primary[50]

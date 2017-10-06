@@ -3,7 +3,6 @@ package router
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	gql "github.com/chanceeakin/magic-mirror/web/server/graphql"
 	// this is for mysql connection
 	_ "github.com/go-sql-driver/mysql"
@@ -21,9 +20,10 @@ func connect() *sql.DB {
 }
 
 // LoginUser is the struct for login!
-type LoginUser struct {
+type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Email    string `json:"email"`
 }
 
 func graphIQL(w http.ResponseWriter, r *http.Request) {
@@ -31,18 +31,18 @@ func graphIQL(w http.ResponseWriter, r *http.Request) {
 }
 
 // Login checks logins.
-func Login(res http.ResponseWriter, req *http.Request) {
+func Login(w http.ResponseWriter, r *http.Request) {
 	db := connect()
 	defer db.Close()
 	// If method is GET serve an html login page
-	if req.Method != "POST" {
-		http.Error(res, "Bad Request", http.StatusBadRequest)
+	if r.Method != "POST" {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
-	var request LoginUser
-	err1 := json.NewDecoder(req.Body).Decode(&request)
+	var request User
+	err1 := json.NewDecoder(r.Body).Decode(&request)
 	if err1 != nil {
-		http.Error(res, err1.Error(), http.StatusBadRequest)
+		http.Error(w, err1.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -59,7 +59,12 @@ func Login(res http.ResponseWriter, req *http.Request) {
 	err := db.QueryRow("SELECT username, password FROM users WHERE username=?", username).Scan(&databaseUsername, &databasePassword)
 	// If not then redirect to the login page
 	if err != nil {
-		http.Redirect(res, req, "/login", 301)
+		val := []byte(`Not Found`)
+		jsonVal, _ := json.Marshal(val)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		//Write json response back to response
+		w.Write(jsonVal)
 		return
 	}
 
@@ -67,30 +72,50 @@ func Login(res http.ResponseWriter, req *http.Request) {
 	err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
 	// If wrong password redirect to the login
 	if err != nil {
-		http.Redirect(res, req, "/login", 301)
+		val := map[string]string{"error": "Unauthorized"}
+		jsonVal, err2 := json.Marshal(val)
+		if err2 != nil {
+			panic(err2)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		//Write json response back to response
+		w.Write(jsonVal)
 		return
 	}
 
 	// If the login succeeded
 	values := map[string]string{"username": databaseUsername}
-	jsonVal, _ := json.Marshal(values)
-
-	res.Write(jsonVal)
+	jsonVal, err := json.Marshal(values)
+	if err != nil {
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	//Write json response back to response
+	w.Write(jsonVal)
 }
 
 // Signup function
-func Signup(res http.ResponseWriter, req *http.Request) {
+func Signup(w http.ResponseWriter, r *http.Request) {
 	db := connect()
 	defer db.Close()
 	// Serve signup.html to get requests to /signup
-	if req.Method != "POST" {
+	if r.Method != "POST" {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
 
-	username := req.FormValue("username")
-	password := req.FormValue("password")
-	email := req.FormValue("email")
-	fmt.Print(username, password, email)
+	var request User
+	err1 := json.NewDecoder(r.Body).Decode(&request)
+	if err1 != nil {
+		http.Error(w, err1.Error(), http.StatusBadRequest)
+		return
+	}
+
+	username := request.Username
+	password := request.Password
+	email := request.Email
 
 	var user string
 
@@ -101,22 +126,61 @@ func Signup(res http.ResponseWriter, req *http.Request) {
 	case err == sql.ErrNoRows:
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		if err != nil {
-			http.Error(res, "Server error, unable to create your account.", 500)
+			values := map[string]string{"error": "Unable to create account."}
+			jsonVal, err1 := json.Marshal(values)
+			if err1 != nil {
+				panic(err1)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusInternalServerError)
+			//Write json response back to response
+			w.Write(jsonVal)
 			return
 		}
 
 		_, err = db.Exec("INSERT INTO users(username, password, email) VALUES(?, ?, ?)", username, hashedPassword, email)
 		if err != nil {
-			http.Error(res, "Server error, unable to create your account.", 500)
+			values := map[string]string{"error": "Unable to create account."}
+			jsonVal, err1 := json.Marshal(values)
+			if err1 != nil {
+				panic(err1)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusInternalServerError)
+			//Write json response back to response
+			w.Write(jsonVal)
 			return
 		}
 
-		res.Write([]byte("User created!"))
+		values := map[string]string{"username": username, "email": email}
+		jsonVal, _ := json.Marshal(values)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		//Write json response back to response
+		w.Write(jsonVal)
 		return
+
 	case err != nil:
-		http.Error(res, "Server error, unable to create your account.", 500)
+		values := map[string]string{"error": "Unable to create account."}
+		jsonVal, err1 := json.Marshal(values)
+		if err1 != nil {
+			panic(err1)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		//Write json response back to response
+		w.Write(jsonVal)
 		return
 	default:
-		http.Redirect(res, req, "/", 301)
+		values := map[string]string{"error": "Unable to create account."}
+		jsonVal, err1 := json.Marshal(values)
+		if err1 != nil {
+			panic(err1)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		//Write json response back to response
+		w.Write(jsonVal)
+		return
 	}
 }

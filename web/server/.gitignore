@@ -3,6 +3,7 @@
 *.dll
 *.so
 *.dylib
+build/
 
 sql/dbconfig.yml
 

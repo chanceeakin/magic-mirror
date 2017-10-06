@@ -11,6 +11,9 @@ import Grid from 'material-ui/Grid'
 import {
   handleSignupSubmit
 } from './../actions/app'
+import {
+  homePage
+} from './../actions/nav'
 import SignupForm from './../components/Signup-Form'
 
 const mapStateToProps = state => ({
@@ -18,7 +21,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  handleSignupSubmit
+  handleSignupSubmit,
+  homePage
 }, dispatch)
 
 const styles = theme => ({
@@ -45,7 +49,8 @@ export default class Signup extends Component {
   static displayName = 'Signup'
   static propTypes = {
     classes: PropTypes.object.isRequired,
-    handleSignupSubmit: PropTypes.func.isRequired
+    handleSignupSubmit: PropTypes.func.isRequired,
+    homePage: PropTypes.func.isRequired
   }
 
   render () {
@@ -65,7 +70,8 @@ export default class Signup extends Component {
         </Grid>
         <Grid item xs={12}>
           <SignupForm
-            handleSubmit={this.props.handleSignupSubmit}
+            onSubmit={this.props.handleSignupSubmit}
+            homePage={this.props.homePage}
           />
         </Grid>
       </Grid>
