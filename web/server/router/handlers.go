@@ -11,7 +11,8 @@ import (
 	"net/http"
 )
 
-func connect() *sql.DB {
+// Connect is the sql connection.
+func Connect() *sql.DB {
 	db, err := sql.Open("mysql", "golangTest:thisisatest@/golangtest")
 	if err != nil {
 		log.Fatal("Could not connect to database")

@@ -81,6 +81,10 @@ module.exports = function (proxy, allowedHost) {
       '/api/*': {
         target: 'http://localhost:8000/',
         secure: false
+      },
+      '/graphql': {
+        target: 'http://localhost:8000/',
+        secure: false
       }
     },
 

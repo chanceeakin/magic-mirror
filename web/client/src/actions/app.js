@@ -6,7 +6,10 @@ import {
   LOGIN_FAIL,
   SIGNUP_CHECK,
   SIGNUP_SUCCESS,
-  SIGNUP_FAIL
+  SIGNUP_FAIL,
+  BEGIN_QUERY,
+  FAILED_REQUEST,
+  SUCCESSFUL_REQUEST
 } from './../constants/action-types'
 
 export const showDialog = () => {
@@ -111,6 +114,50 @@ const failedLogin = payload => {
     dispatch({
       type: LOGIN_FAIL,
       payload
+    })
+  }
+}
+
+export const graphQLQueryTest = () => {
+  return async dispatch => {
+    dispatch({
+      type: BEGIN_QUERY
+    })
+    const query = `query { hello
+        }`
+    try {
+      const response = await fetch(`${process.env.PUBLIC_URL}/graphql`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          query: query
+        })
+      })
+      const json = await response.json()
+      await dispatch(successfulRequest(json.data))
+    } catch (err) {
+      return dispatch(failedRequest(err))
+    }
+  }
+}
+
+export const successfulRequest = payload => {
+  console.log(payload)
+  return dispatch => {
+    dispatch({
+      type: SUCCESSFUL_REQUEST
+    })
+  }
+}
+
+export const failedRequest = payload => {
+  console.log(payload)
+  return dispatch => {
+    dispatch({
+      type: FAILED_REQUEST
     })
   }
 }

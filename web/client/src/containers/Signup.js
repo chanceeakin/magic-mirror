@@ -7,9 +7,11 @@ import {withRouter} from 'react-router'
 import {withTheme, withStyles} from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
 import Grid from 'material-ui/Grid'
+import Button from 'material-ui/Button'
 
 import {
-  handleSignupSubmit
+  handleSignupSubmit,
+  graphQLQueryTest
 } from './../actions/app'
 import {
   homePage
@@ -22,7 +24,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   handleSignupSubmit,
-  homePage
+  homePage,
+  graphQLQueryTest
 }, dispatch)
 
 const styles = theme => ({
@@ -50,7 +53,8 @@ export default class Signup extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     handleSignupSubmit: PropTypes.func.isRequired,
-    homePage: PropTypes.func.isRequired
+    homePage: PropTypes.func.isRequired,
+    graphQLQueryTest: PropTypes.func.isRequired
   }
 
   render () {
@@ -74,6 +78,9 @@ export default class Signup extends Component {
             homePage={this.props.homePage}
           />
         </Grid>
+        <Button
+          onTouchTap={() => this.props.graphQLQueryTest()}
+        >Click!</Button>
       </Grid>
     )
   }
