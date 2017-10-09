@@ -1,0 +1,5 @@
+{
+  "name"    : "magic-mirror-face-detection",
+  "version" : "0.1.0",
+  "main"    : "main.js"
+}

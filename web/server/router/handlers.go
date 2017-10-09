@@ -6,10 +6,15 @@ import (
 	gql "github.com/chanceeakin/magic-mirror/web/server/graphql"
 	// this is for mysql connection
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/securecookie"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 )
+
+var cookieHandler = securecookie.New(
+	securecookie.GenerateRandomKey(64),
+	securecookie.GenerateRandomKey(32))
 
 // Connect is the sql connection.
 func Connect() *sql.DB {
@@ -33,7 +38,7 @@ func graphIQL(w http.ResponseWriter, r *http.Request) {
 
 // Login checks logins.
 func Login(w http.ResponseWriter, r *http.Request) {
-	db := connect()
+	db := Connect()
 	defer db.Close()
 	// If method is GET serve an html login page
 	if r.Method != "POST" {
@@ -99,7 +104,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 // Signup function
 func Signup(w http.ResponseWriter, r *http.Request) {
-	db := connect()
+	db := Connect()
 	defer db.Close()
 	// Serve signup.html to get requests to /signup
 	if r.Method != "POST" {
@@ -184,4 +189,38 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		w.Write(jsonVal)
 		return
 	}
+}
+
+func setSession(userName string, response http.ResponseWriter) {
+	value := map[string]string{
+		"name": userName,
+	}
+	if encoded, err := cookieHandler.Encode("session", value); err == nil {
+		cookie := &http.Cookie{
+			Name:  "session",
+			Value: encoded,
+			Path:  "/",
+		}
+		http.SetCookie(response, cookie)
+	}
+}
+
+func getUserName(request *http.Request) (userName string) {
+	if cookie, err := request.Cookie("session"); err == nil {
+		cookieValue := make(map[string]string)
+		if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
+			userName = cookieValue["name"]
+		}
+	}
+	return userName
+}
+
+func clearSession(response http.ResponseWriter) {
+	cookie := &http.Cookie{
+		Name:   "session",
+		Value:  "",
+		Path:   "/",
+		MaxAge: -1,
+	}
+	http.SetCookie(response, cookie)
 }
