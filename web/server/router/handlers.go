@@ -7,6 +7,7 @@ import (
 	// this is for mysql connection
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/securecookie"
+	// "github.com/sec51/twofactor"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
@@ -25,6 +26,18 @@ func Connect() *sql.DB {
 	return db
 }
 
+// func Generate() {
+// 	otp, err := twofactor.NewTOTP("info@sec51.com", "Sec51", crypto.SHA1, 8)
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	qrBytes, err := otp.QR()
+// 	if err != nil {
+// 		return err
+// 	}
+// }
+
 // LoginUser is the struct for login!
 type User struct {
 	Username string `json:"username"`
@@ -37,7 +50,7 @@ func graphIQL(w http.ResponseWriter, r *http.Request) {
 }
 
 // Login checks logins.
-func Login(w http.ResponseWriter, r *http.Request) {
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	db := Connect()
 	defer db.Close()
 	// If method is GET serve an html login page
@@ -92,6 +105,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// If the login succeeded
 	values := map[string]string{"username": databaseUsername}
+	setSession(databaseUsername, w)
+
 	jsonVal, err := json.Marshal(values)
 	if err != nil {
 		panic(err)
@@ -103,7 +118,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 // Signup function
-func Signup(w http.ResponseWriter, r *http.Request) {
+func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	db := Connect()
 	defer db.Close()
 	// Serve signup.html to get requests to /signup
@@ -193,7 +208,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 func setSession(userName string, response http.ResponseWriter) {
 	value := map[string]string{
-		"name": userName,
+		"username": userName,
 	}
 	if encoded, err := cookieHandler.Encode("session", value); err == nil {
 		cookie := &http.Cookie{
@@ -209,7 +224,7 @@ func getUserName(request *http.Request) (userName string) {
 	if cookie, err := request.Cookie("session"); err == nil {
 		cookieValue := make(map[string]string)
 		if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
-			userName = cookieValue["name"]
+			userName = cookieValue["username"]
 		}
 	}
 	return userName
@@ -223,4 +238,19 @@ func clearSession(response http.ResponseWriter) {
 		MaxAge: -1,
 	}
 	http.SetCookie(response, cookie)
+}
+
+// LogoutHandler controls session clearing.
+func LogoutHandler(response http.ResponseWriter, request *http.Request) {
+	clearSession(response)
+	http.Redirect(response, request, "/", 302)
+}
+
+// IndexHandler sends the entry point of the app
+func IndexHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, entrypoint)
+	}
+
+	return http.HandlerFunc(fn)
 }
