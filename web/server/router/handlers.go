@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	gql "github.com/chanceeakin/magic-mirror/web/server/graphql"
 	// this is for mysql connection
+	"crypto"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/securecookie"
-	// "github.com/sec51/twofactor"
+	"github.com/sec51/twofactor"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
@@ -26,19 +27,7 @@ func Connect() *sql.DB {
 	return db
 }
 
-// func Generate() {
-// 	otp, err := twofactor.NewTOTP("info@sec51.com", "Sec51", crypto.SHA1, 8)
-// 	if err != nil {
-// 		return err
-// 	}
-//
-// 	qrBytes, err := otp.QR()
-// 	if err != nil {
-// 		return err
-// 	}
-// }
-
-// LoginUser is the struct for login!
+// User is the struct for login!
 type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -49,7 +38,7 @@ func graphIQL(w http.ResponseWriter, r *http.Request) {
 	w.Write(gql.Page)
 }
 
-// Login checks logins.
+// LoginHandler checks logins.
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	db := Connect()
 	defer db.Close()
@@ -246,11 +235,25 @@ func LogoutHandler(response http.ResponseWriter, request *http.Request) {
 	http.Redirect(response, request, "/", 302)
 }
 
-// IndexHandler sends the entry point of the app
-func IndexHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
+// FileHandler sends the entry point of the app
+func FileHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, entrypoint)
 	}
 
 	return http.HandlerFunc(fn)
+}
+
+func TokenHandler(w http.ResponseWriter, r *http.Request) {
+	otp, err := twofactor.NewTOTP("test@test.com", "meeeeee", crypto.SHA1, 8)
+	if err != nil {
+		panic(err)
+	}
+
+	qrBytes, err1 := otp.QR()
+	if err1 != nil {
+		panic(err1)
+	}
+
+	w.Write((qrBytes))
 }

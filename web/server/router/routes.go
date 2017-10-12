@@ -34,13 +34,14 @@ func NewRouter() *http.Server {
 	router.HandleFunc("/api/login", LoginHandler)
 	router.HandleFunc("/api/logout", LogoutHandler)
 	router.Handle("/graphql", &relay.Handler{Schema: schema})
+	router.HandleFunc("/make", TokenHandler)
 	// this is how create react app works and does client side rendering in GoLang. WTF.
 	router.PathPrefix("/static").Handler(http.FileServer(http.Dir(static)))
-	router.PathPrefix("/favicon.ico").HandlerFunc(IndexHandler(favicon))
-	router.PathPrefix("/service-worker.js").HandlerFunc(IndexHandler(serviceWorker))
-	router.PathPrefix("/asset-manifest.json").HandlerFunc(IndexHandler(assetManifest))
-	router.PathPrefix("/manifest.json").HandlerFunc(IndexHandler(manifest))
-	router.PathPrefix("/").HandlerFunc(IndexHandler(entry))
+	router.PathPrefix("/favicon.ico").HandlerFunc(FileHandler(favicon))
+	router.PathPrefix("/service-worker.js").HandlerFunc(FileHandler(serviceWorker))
+	router.PathPrefix("/asset-manifest.json").HandlerFunc(FileHandler(assetManifest))
+	router.PathPrefix("/manifest.json").HandlerFunc(FileHandler(manifest))
+	router.PathPrefix("/").HandlerFunc(FileHandler(entry))
 
 	srv := &http.Server{
 		Handler: router,
