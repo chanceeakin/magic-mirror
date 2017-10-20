@@ -15,10 +15,6 @@ import {
   signUpPage
 } from './../actions/nav'
 
-import LoginForm from './../components/Login-Form'
-import mp4 from './../constants/videos/Perfect_Hour.mp4'
-import webm from './../constants/videos/Perfect_Hour.webm'
-
 const mapStateToProps = state => ({
   isDialogOpen: state.app.isDialogOpen
 })
@@ -33,41 +29,14 @@ const styles = theme => ({
     textAlign: 'center',
     margin: 0
   },
-  logo: {
-    animation: 'spin infinite 20s linear',
-    height: '80px'
-  },
   header: {
     padding: '3em'
   },
   hero: {
-    color: theme.palette.primary[50]
+    color: theme.palette.primary[500]
   },
   intro: {
     fontSize: 'large'
-  },
-  video: {
-    position: 'fixed',
-    right: 0,
-    bottom: 0,
-    minWidth: '100%',
-    minHeight: '100%',
-    width: 'auto',
-    height: 'auto',
-    zIndex: '-100'
-  },
-  button: {
-    margin: '1em',
-    alignself: 'center',
-    justifySelf: 'center'
-  },
-  '@keyframes spin': {
-    from: {
-      transform: 'rotate(0deg)'
-    },
-    to: {
-      transform: 'rotate(360deg)'
-    }
   }
 })
 
@@ -78,9 +47,7 @@ const styles = theme => ({
 export default class Home extends Component {
   static displayName = 'Login'
   static propTypes = {
-    classes: PropTypes.object.isRequired,
-    handleLoginSubmit: PropTypes.func.isRequired,
-    signUpPage: PropTypes.func.isRequired
+    classes: PropTypes.object.isRequired
   }
 
   render () {
@@ -96,18 +63,9 @@ export default class Home extends Component {
           className={classes.header}
           xs={12}
         >
-          <video autoPlay loop className={classes.video}>
-            <source src={mp4} type='video/mp4' />
-            <source src={webm} type='video/webm' />
-          </video>
-          <Typography type='display4' className={classes.hero}>Magic Mirror</Typography>
+          <Typography type='display4' className={classes.hero}>Signed In</Typography>
         </Grid>
-        <Grid item xs={12}>
-          <LoginForm
-            onSubmit={this.props.handleLoginSubmit}
-            signUpPage={this.props.signUpPage}
-          />
-        </Grid>
+        <Grid item xs={12} />
       </Grid>
     )
   }

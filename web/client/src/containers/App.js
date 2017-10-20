@@ -8,17 +8,22 @@ import Routes from './../routes'
 
 import {
   showDialog,
-  hideDialog
+  hideDialog,
+  checkAppBar
 } from './../actions/app'
-// import AppBar from './../components/App-Bar'
+import AppBar from './../components/App-Bar'
 
 const mapStateToProps = state => ({
-  isDialogOpen: state.app.isDialogOpen
+  isDialogOpen: state.app.isDialogOpen,
+  isUserAuthed: state.app.isUserAuthed,
+  isAppBarShown: state.app.isAppBarShown,
+  pathname: state.routing.location.pathname
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   showDialog,
-  hideDialog
+  hideDialog,
+  checkAppBar
 }, dispatch)
 
 const styles = theme => ({
@@ -63,16 +68,35 @@ const styles = theme => ({
 export default class App extends Component {
   static displayName = 'App'
   static propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    isUserAuthed: PropTypes.bool.isRequired,
+    isAppBarShown: PropTypes.bool.isRequired,
+    checkAppBar: PropTypes.func.isRequired,
+    pathname: PropTypes.string.isRequired
+  }
+
+  componentDidMount () {
+    this.props.checkAppBar(this.props.pathname)
+  }
+
+  componentDidUpdate (nextProps) {
+    if (nextProps.pathname !== this.props.pathname) {
+      this.props.checkAppBar(this.props.pathname)
+    }
   }
 
   render () {
     const {classes} = this.props
+    console.log(this.props)
     return (
       <div className={classes.app}>
-        {/* <AppBar /> */}
+        {this.props.isAppBarShown ? (
+          <AppBar />
+        ) : null}
         <main>
-          <Routes />
+          <Routes
+            isUserAuthed={this.props.isUserAuthed}
+          />
         </main>
       </div>
     )

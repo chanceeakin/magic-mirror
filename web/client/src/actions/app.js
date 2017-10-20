@@ -9,8 +9,10 @@ import {
   SIGNUP_FAIL,
   BEGIN_QUERY,
   FAILED_REQUEST,
-  SUCCESSFUL_REQUEST
+  SUCCESSFUL_REQUEST,
+  APP_BAR_CHECK
 } from './../constants/action-types'
+import {authedHomePage} from './nav'
 
 export const showDialog = () => {
   return dispatch => {
@@ -59,7 +61,7 @@ export const handleLoginSubmit = payload => {
       type: LOGIN_CHECK
     })
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch(`${process.env.PUBLIC_URL}/api/login`, {
         method: 'POST',
         headers: new Headers({
           'Content-Type': 'application/json'
@@ -72,15 +74,29 @@ export const handleLoginSubmit = payload => {
       })
       const res = await response
       const json = await res.json()
-      await dispatch(successfulLogin(json))
+      await dispatch(handleLogin({
+        status: res.status,
+        json
+      }))
     } catch (err) {
       return dispatch(failedLogin(err))
     }
   }
 }
 
-const successfulSignup = payload => {
+const handleLogin = payload => {
   console.log(payload)
+  return dispatch => {
+    if (payload.status === 200 && payload.json.username) {
+      dispatch(successfulLogin(payload.json))
+      dispatch(authedHomePage())
+    } else {
+      dispatch(failedLogin(payload))
+    }
+  }
+}
+
+const successfulSignup = payload => {
   return dispatch => {
     dispatch({
       type: SIGNUP_SUCCESS,
@@ -90,7 +106,6 @@ const successfulSignup = payload => {
 }
 
 const failedSignup = payload => {
-  console.log(payload)
   return dispatch => {
     dispatch({
       type: SIGNUP_FAIL,
@@ -137,15 +152,25 @@ export const graphQLQueryTest = () => {
         })
       })
       const json = await response.json()
-      await dispatch(successfulRequest(json.data))
+      await dispatch(handleRequest(json.data))
     } catch (err) {
       return dispatch(failedRequest(err))
     }
   }
 }
 
-export const successfulRequest = payload => {
+const handleRequest = payload => {
   console.log(payload)
+  return dispatch => {
+    if (!payload.error) {
+      dispatch(successfulRequest(payload))
+    } else {
+      dispatch(failedRequest(payload))
+    }
+  }
+}
+
+export const successfulRequest = payload => {
   return dispatch => {
     dispatch({
       type: SUCCESSFUL_REQUEST
@@ -159,5 +184,21 @@ export const failedRequest = payload => {
     dispatch({
       type: FAILED_REQUEST
     })
+  }
+}
+
+export const checkAppBar = payload => {
+  return dispatch => {
+    if (payload === '/home') {
+      dispatch({
+        type: APP_BAR_CHECK,
+        payload: true
+      })
+    } else {
+      dispatch({
+        type: APP_BAR_CHECK,
+        payload: false
+      })
+    }
   }
 }

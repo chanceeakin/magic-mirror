@@ -11,3 +11,9 @@ export const signUpPage = () => {
     dispatch(push('/signup'))
   }
 }
+
+export const authedHomePage = () => {
+  return dispatch => {
+    dispatch(push('/home'))
+  }
+}

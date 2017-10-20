@@ -245,10 +245,14 @@ func FileHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request)
 }
 
 func TokenHandler(w http.ResponseWriter, r *http.Request) {
+	// db := Connect()
+	// defer db.Close()
 	otp, err := twofactor.NewTOTP("test@test.com", "meeeeee", crypto.SHA1, 8)
 	if err != nil {
 		panic(err)
 	}
+
+	// _, err = db.Exec("INSERT INTO users(username, password, email) VALUES(?, ?, ?)", username, hashedPassword, email)
 
 	qrBytes, err1 := otp.QR()
 	if err1 != nil {

@@ -1,10 +1,16 @@
 import {
   DIALOG_HIDE,
-  DIALOG_SHOW
+  DIALOG_SHOW,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  APP_BAR_CHECK
 } from './../constants/action-types'
 
 const initialState = {
-  isDialogOpen: false
+  isDialogOpen: false,
+  isUserAuthed: false,
+  error: null,
+  isAppBarShown: false
 }
 
 export default (state = initialState, action) => {
@@ -18,6 +24,21 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isDialogOpen: false
+      }
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        isUserAuthed: true
+      }
+    case LOGIN_FAIL:
+      return {
+        ...state,
+        isUserAuthed: false
+      }
+    case APP_BAR_CHECK:
+      return {
+        ...state,
+        isAppBarShown: action.payload
       }
     default:
       return state
