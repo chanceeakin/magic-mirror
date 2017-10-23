@@ -1,11 +1,10 @@
 package router
 
 import (
+	"crypto"
 	"database/sql"
 	"encoding/json"
-	gql "github.com/chanceeakin/magic-mirror/web/server/graphql"
 	// this is for mysql connection
-	"crypto"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/securecookie"
 	"github.com/sec51/twofactor"
@@ -16,7 +15,8 @@ import (
 
 var cookieHandler = securecookie.New(
 	securecookie.GenerateRandomKey(64),
-	securecookie.GenerateRandomKey(32))
+	securecookie.GenerateRandomKey(32),
+)
 
 // Connect is the sql connection.
 func Connect() *sql.DB {
@@ -32,10 +32,6 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
-}
-
-func graphIQL(w http.ResponseWriter, r *http.Request) {
-	w.Write(gql.Page)
 }
 
 // LoginHandler checks logins.
