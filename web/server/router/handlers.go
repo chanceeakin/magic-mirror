@@ -240,6 +240,7 @@ func FileHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request)
 	return http.HandlerFunc(fn)
 }
 
+// TokenHandler sends tokens/qr codes.
 func TokenHandler(w http.ResponseWriter, r *http.Request) {
 	// db := Connect()
 	// defer db.Close()

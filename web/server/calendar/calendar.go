@@ -90,6 +90,7 @@ func saveToken(file string, token *oauth2.Token) {
 	json.NewEncoder(f).Encode(token)
 }
 
+// Init takes the place of main.
 func Init() {
 	ctx := context.Background()
 
