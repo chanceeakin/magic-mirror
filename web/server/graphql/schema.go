@@ -8,7 +8,7 @@ var Schema = `
 	type Query {
 		hello: String!
 		user(id: ID!): User
-		calendar: Calendar
+		# calendar: Calendar
 	}
 	type User {
 		id: ID!
@@ -16,8 +16,14 @@ var Schema = `
 		email: String!
 		password: String!
 	}
-	type Calendar {
-		time: Float!
-		summary: String!
-	}
 `
+
+//
+// type Calendar {
+// 	events: [Event]
+// }
+// type Event {
+// 	id: ID!
+// 	time: Float!
+// 	summary: String!
+// }

@@ -32,6 +32,7 @@ func NewRouter() *http.Server {
 	router.HandleFunc("/graphiql", graphIQL)
 	router.HandleFunc("/api/signup", SignupHandler)
 	router.HandleFunc("/api/login", LoginHandler)
+	router.HandleFunc("/api/calendar", CalendarHandler)
 	router.HandleFunc("/api/logout", LogoutHandler)
 	router.Handle("/graphql", &relay.Handler{Schema: schema})
 	router.HandleFunc("/make", TokenHandler)

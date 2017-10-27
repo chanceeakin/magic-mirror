@@ -15,16 +15,6 @@ type user struct {
 	email    string
 }
 
-type calendar struct {
-	time    float64
-	summary string
-}
-
-var mockCalendar = calendar{
-	time:    5353432,
-	summary: "test",
-}
-
 // mock data.
 var users = []*user{
 	{
@@ -53,29 +43,12 @@ func (r *Resolver) Hello() string {
 	return "Hello world!"
 }
 
-func (r *Resolver) Calendar() *calendarResolver {
-	e := &mockCalendar
-	return &calendarResolver{e}
-}
-
 // User is more robust test query that looks through the slice for available users.
 func (r *Resolver) User(args struct{ ID graphql.ID }) *userResolver {
 	if u := userData[args.ID]; u != nil {
 		return &userResolver{u}
 	}
 	return nil
-}
-
-type calendarResolver struct {
-	c *calendar
-}
-
-func (r *calendarResolver) Time() float64 {
-	return r.c.time
-}
-
-func (r *calendarResolver) Summary() string {
-	return r.c.summary
 }
 
 type userResolver struct {

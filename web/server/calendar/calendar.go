@@ -91,7 +91,7 @@ func saveToken(file string, token *oauth2.Token) {
 }
 
 // Init takes the place of main.
-func Init() {
+func Init() *calendar.Events {
 	ctx := context.Background()
 
 	b, err := ioutil.ReadFile("./keys/client_secret.json")
@@ -120,21 +120,8 @@ func Init() {
 		log.Fatalf("Unable to retrieve next ten of the user's events. %v", err)
 	}
 
-	fmt.Println("Upcoming events:")
 	if len(events.Items) > 0 {
-		for _, i := range events.Items {
-			var when string
-			// If the DateTime is an empty string the Event is an all-day Event.
-			// So only Date is available.
-			if i.Start.DateTime != "" {
-				when = i.Start.DateTime
-			} else {
-				when = i.Start.Date
-			}
-			fmt.Printf("%s (%s)\n", i.Summary, when)
-		}
-	} else {
-		fmt.Printf("No upcoming events found.\n")
+		return events
 	}
-
+	return nil
 }
