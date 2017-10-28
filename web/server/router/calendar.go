@@ -2,15 +2,12 @@ package router
 
 import (
 	"encoding/json"
-	"fmt"
 	calendar "github.com/chanceeakin/magic-mirror/web/server/calendar"
 	"net/http"
 )
 
 func CalendarHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Print("WHAT WHAT WHAT")
 	if r.Method != "GET" {
-		fmt.Print("HEY")
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
@@ -18,7 +15,7 @@ func CalendarHandler(w http.ResponseWriter, r *http.Request) {
 	values := calendar.Init()
 
 	if values == nil {
-		val := string(`Not Found`)
+		val := map[string]string{"result": "no events found!"}
 		jsonVal, _ := json.Marshal(val)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
@@ -28,7 +25,6 @@ func CalendarHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonVal, err := json.Marshal(values)
-	fmt.Print(values)
 	if err != nil {
 		panic(err)
 	}
