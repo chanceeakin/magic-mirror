@@ -18,3 +18,5 @@ sql/dbconfig.yml
 
 keys/
 keys/client_secret.json
+
+vendor/

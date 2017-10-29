@@ -1,0 +1,207 @@
+{
+	"ImportPath": "github.com/chanceeakin/magic-mirror/web/server",
+	"GoVersion": "go1.9",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "cloud.google.com/go/compute/metadata",
+			"Comment": "v0.15.0-9-gba25346",
+			"Rev": "ba2534604a6c2b8854d680e50f9132cade92d02f"
+		},
+		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.3-31-g26471af",
+			"Rev": "26471af196a17ee75a22e6481b5a5897fb16b081"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.5.0-1-g3f19343",
+			"Rev": "3f19343c7d9ce75569b952758bd236af94956061"
+		},
+		{
+			"ImportPath": "github.com/gorilla/securecookie",
+			"Comment": "v1.1-6-ge59506c",
+			"Rev": "e59506cc896acb7f7bf732d4fdf5e25f7ccd8983"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/errors",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/internal/common",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/internal/exec",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/internal/exec/packer",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/internal/exec/resolvable",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/internal/exec/selected",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/internal/query",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/internal/schema",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/internal/validation",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/introspection",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/log",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/relay",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/neelance/graphql-go/trace",
+			"Rev": "10eb949b8f4439212ef19d5d924c47c10c110cc7"
+		},
+		{
+			"ImportPath": "github.com/opentracing/opentracing-go",
+			"Comment": "v1.0.2-4-g8ebe5d4",
+			"Rev": "8ebe5d4e236eed9fd88e593c288bfb804d630b8c"
+		},
+		{
+			"ImportPath": "github.com/opentracing/opentracing-go/ext",
+			"Comment": "v1.0.2-4-g8ebe5d4",
+			"Rev": "8ebe5d4e236eed9fd88e593c288bfb804d630b8c"
+		},
+		{
+			"ImportPath": "github.com/opentracing/opentracing-go/log",
+			"Comment": "v1.0.2-4-g8ebe5d4",
+			"Rev": "8ebe5d4e236eed9fd88e593c288bfb804d630b8c"
+		},
+		{
+			"ImportPath": "github.com/sec51/convert",
+			"Rev": "8ed1f399b5e0a9a9620c74cfd5aec3682d8328ab"
+		},
+		{
+			"ImportPath": "github.com/sec51/convert/bigendian",
+			"Rev": "8ed1f399b5e0a9a9620c74cfd5aec3682d8328ab"
+		},
+		{
+			"ImportPath": "github.com/sec51/convert/smallendian",
+			"Rev": "8ed1f399b5e0a9a9620c74cfd5aec3682d8328ab"
+		},
+		{
+			"ImportPath": "github.com/sec51/cryptoengine",
+			"Rev": "11617a465c082a1e82359b3c059f018f8dcbfc93"
+		},
+		{
+			"ImportPath": "github.com/sec51/gf256",
+			"Rev": "2454accbeb9e6b0e2e53b01e1d641c7157251ed4"
+		},
+		{
+			"ImportPath": "github.com/sec51/qrcode",
+			"Rev": "b7779abbcaf1ec4de65f586a85fe24db31d45e7c"
+		},
+		{
+			"ImportPath": "github.com/sec51/qrcode/coding",
+			"Rev": "b7779abbcaf1ec4de65f586a85fe24db31d45e7c"
+		},
+		{
+			"ImportPath": "github.com/sec51/twofactor",
+			"Comment": "v1.0.0-5-g7018945",
+			"Rev": "70189459dfeb9c4b243763440e51a29ad0452147"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/bcrypt",
+			"Rev": "81e90905daefcd6fd217b62423c0908922eadb30"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/blowfish",
+			"Rev": "81e90905daefcd6fd217b62423c0908922eadb30"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/curve25519",
+			"Rev": "81e90905daefcd6fd217b62423c0908922eadb30"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/hkdf",
+			"Rev": "81e90905daefcd6fd217b62423c0908922eadb30"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/nacl/box",
+			"Rev": "81e90905daefcd6fd217b62423c0908922eadb30"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/nacl/secretbox",
+			"Rev": "81e90905daefcd6fd217b62423c0908922eadb30"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/poly1305",
+			"Rev": "81e90905daefcd6fd217b62423c0908922eadb30"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/salsa20/salsa",
+			"Rev": "81e90905daefcd6fd217b62423c0908922eadb30"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "a04bdaca5b32abe1c069418fb7088ae607de5bd0"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context/ctxhttp",
+			"Rev": "a04bdaca5b32abe1c069418fb7088ae607de5bd0"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "bb50c06baba3d0c76f9d125c0719093e315b5b44"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/google",
+			"Rev": "bb50c06baba3d0c76f9d125c0719093e315b5b44"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/internal",
+			"Rev": "bb50c06baba3d0c76f9d125c0719093e315b5b44"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/jws",
+			"Rev": "bb50c06baba3d0c76f9d125c0719093e315b5b44"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/jwt",
+			"Rev": "bb50c06baba3d0c76f9d125c0719093e315b5b44"
+		},
+		{
+			"ImportPath": "google.golang.org/api/calendar/v3",
+			"Rev": "9e2045da407b8bc1df9bc5c14d4d1a7e7e182e05"
+		},
+		{
+			"ImportPath": "google.golang.org/api/gensupport",
+			"Rev": "9e2045da407b8bc1df9bc5c14d4d1a7e7e182e05"
+		},
+		{
+			"ImportPath": "google.golang.org/api/googleapi",
+			"Rev": "9e2045da407b8bc1df9bc5c14d4d1a7e7e182e05"
+		},
+		{
+			"ImportPath": "google.golang.org/api/googleapi/internal/uritemplates",
+			"Rev": "9e2045da407b8bc1df9bc5c14d4d1a7e7e182e05"
+		}
+	]
+}
