@@ -13,6 +13,7 @@ func CalendarHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	values := calendar.Init()
+	calendar.GetCalendars()
 
 	if values == nil {
 		val := map[string]string{"result": "no events found!"}

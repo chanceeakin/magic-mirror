@@ -7,29 +7,33 @@ var Schema = `
 	}
 	type Query {
 		hello: String!
-		user(id: ID!): User
 		calendar: Calendar
-	}
-	type User {
-		id: ID!
-		username: String!
-		email: String!
-		password: String!
+		calendarList: CalendarList
 	}
 	type Calendar {
 		title: String!
 		timezone: String!
 		items: [Event]
 	}
+	type CalendarList {
+		listItems: [CalendarListEntry]
+	}
 	type Event {
 		summary: String!
 		location: String!
 		start: EventDateTime!
+		end: EventDateTime!
 	}
 	type EventDateTime {
 		date: String!
 		dateTime: String!
 		TimeZone: String!
+	}
+	type CalendarListEntry {
+		summary: String!
+		TimeZone: String!
+		Primary: Boolean!
+		id: String!
 	}
 `
 

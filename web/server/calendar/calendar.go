@@ -125,3 +125,35 @@ func Init() *calendar.Events {
 	}
 	return nil
 }
+
+// GetCalendars grabs a users' calendars
+func GetCalendars() *calendar.CalendarList {
+	ctx := context.Background()
+
+	b, err := ioutil.ReadFile("./keys/client_secret.json")
+	if err != nil {
+		log.Fatalf("Unable to read client secret file: %v", err)
+	}
+
+	// If modifying these scopes, delete your previously saved credentials
+	// at ~/.credentials/calendar-go-quickstart.json
+	config, err := google.ConfigFromJSON(b, calendar.CalendarReadonlyScope)
+	if err != nil {
+		log.Fatalf("Unable to parse client secret file to config: %v", err)
+	}
+	client := getClient(ctx, config)
+
+	srv, err := calendar.New(client)
+	if err != nil {
+		log.Fatalf("Unable to retrieve calendar Client %v", err)
+	}
+
+	listRes, err := srv.CalendarList.List().Fields("items").Do()
+	if err != nil {
+		log.Fatalf("Unable to retrieve list of calendars: %v", err)
+	}
+	if len(listRes.Items) > 0 {
+		return listRes
+	}
+	return nil
+}
