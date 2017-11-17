@@ -12,7 +12,7 @@ func CalendarHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	values := calendar.Init()
+	values := calendar.CalFunc()
 	calendar.GetCalendars()
 
 	if values == nil {

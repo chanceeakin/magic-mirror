@@ -4,6 +4,7 @@
 *.so
 *.dylib
 build/
+.DS_Store
 
 sql/dbconfig.yml
 

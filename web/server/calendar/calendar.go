@@ -90,8 +90,8 @@ func saveToken(file string, token *oauth2.Token) {
 	json.NewEncoder(f).Encode(token)
 }
 
-// Init takes the place of main.
-func Init() *calendar.Events {
+// CalFunc takes the place of main.
+func CalFunc() *calendar.Events {
 	ctx := context.Background()
 
 	b, err := ioutil.ReadFile("./keys/client_secret.json")

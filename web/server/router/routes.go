@@ -34,6 +34,7 @@ func NewRouter() *http.Server {
 	router.HandleFunc("/api/login", LoginHandler)
 	router.HandleFunc("/api/calendar", CalendarHandler)
 	router.HandleFunc("/api/logout", LogoutHandler)
+	router.HandleFunc("/auth", AuthHandler)
 	router.Handle("/graphql", &relay.Handler{Schema: schema})
 	router.HandleFunc("/make", TokenHandler)
 	// this is how create react app works and does client side rendering in GoLang. WTF.
@@ -45,9 +46,8 @@ func NewRouter() *http.Server {
 	router.PathPrefix("/").HandlerFunc(FileHandler(entry))
 
 	srv := &http.Server{
-		Handler: router,
-		Addr:    "127.0.0.1:8000",
-		// Good practice: enforce timeouts for servers you create!
+		Handler:      router,
+		Addr:         "127.0.0.1:8000",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
