@@ -96,8 +96,8 @@ func (r *EventDateTimeResolver) TimeZone() string {
 }
 
 // Calendar is the endpoint for your daily calendar delivery
-func (r *Resolver) Calendar() *CalendarResolver {
-	if c := cal.CalFunc(); c != nil {
+func (r *Resolver) Calendar(args struct{ CalID string }) *CalendarResolver {
+	if c := cal.CalFunc(args.CalID); c != nil {
 		return &CalendarResolver{c}
 	}
 	return nil

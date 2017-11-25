@@ -3,6 +3,7 @@ package router
 import (
 	"flag"
 	gql "github.com/chanceeakin/magic-mirror/web/server/graphql"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
@@ -45,8 +46,11 @@ func NewRouter() *http.Server {
 	router.PathPrefix("/manifest.json").HandlerFunc(FileHandler(manifest))
 	router.PathPrefix("/").HandlerFunc(FileHandler(entry))
 
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Accept"})
+	originsOk := handlers.AllowedOrigins([]string{"http://localhost:8080"})
+
 	srv := &http.Server{
-		Handler:      router,
+		Handler:      handlers.CORS(headersOk, originsOk)(router),
 		Addr:         "127.0.0.1:8000",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,

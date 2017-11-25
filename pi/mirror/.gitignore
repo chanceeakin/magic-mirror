@@ -62,6 +62,7 @@ Temporary Items
 
 # Ignore all modules except the default modules.
 /modules/**
+!/modules/Google-Cal
 !/modules/default
 !/modules/default/**
 !/modules/README.md**

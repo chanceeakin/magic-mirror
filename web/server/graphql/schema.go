@@ -7,7 +7,7 @@ var Schema = `
 	}
 	type Query {
 		hello: String!
-		calendar: Calendar
+		calendar(calID: String!): Calendar
 		calendarList: CalendarList
 	}
 	type Calendar {

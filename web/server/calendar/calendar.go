@@ -91,7 +91,7 @@ func saveToken(file string, token *oauth2.Token) {
 }
 
 // CalFunc takes the place of main.
-func CalFunc() *calendar.Events {
+func CalFunc(calID string) *calendar.Events {
 	ctx := context.Background()
 
 	b, err := ioutil.ReadFile("./keys/client_secret.json")
@@ -103,6 +103,7 @@ func CalFunc() *calendar.Events {
 	// at ~/.credentials/calendar-go-quickstart.json
 	config, err := google.ConfigFromJSON(b, calendar.CalendarReadonlyScope)
 	if err != nil {
+		fmt.Println("Well, this is a surprise")
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
 	client := getClient(ctx, config)
@@ -114,7 +115,7 @@ func CalFunc() *calendar.Events {
 
 	t := time.Now()
 	maxT := t.AddDate(0, 0, 1)
-	events, err := srv.Events.List("primary").ShowDeleted(false).
+	events, err := srv.Events.List(calID).ShowDeleted(false).
 		SingleEvents(true).TimeMin(t.Format(time.RFC3339)).TimeMax(maxT.Format(time.RFC3339)).MaxResults(10).OrderBy("startTime").Do()
 	if err != nil {
 		log.Fatalf("Unable to retrieve next ten of the user's events. %v", err)

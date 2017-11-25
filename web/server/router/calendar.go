@@ -6,13 +6,14 @@ import (
 	"net/http"
 )
 
+// CalendarHandler is an http function for delivering calendar information.
 func CalendarHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
-
-	values := calendar.CalFunc()
+	calID := "primary"
+	values := calendar.CalFunc(calID)
 	calendar.GetCalendars()
 
 	if values == nil {
