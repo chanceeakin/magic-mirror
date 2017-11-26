@@ -47,7 +47,7 @@ func NewRouter() *http.Server {
 	router.PathPrefix("/").HandlerFunc(FileHandler(entry))
 
 	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Accept"})
-	originsOk := handlers.AllowedOrigins([]string{"http://localhost:8080"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
 
 	srv := &http.Server{
 		Handler:      handlers.CORS(headersOk, originsOk)(router),
