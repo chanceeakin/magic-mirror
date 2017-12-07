@@ -105,7 +105,7 @@ func (r *Resolver) Calendar(args struct{ CalID string }) *CalendarResolver {
 
 // CalendarList returns a list of calendars
 func (r *Resolver) CalendarList() *ListResolver {
-	if l := cal.GetCalendars(); l != nil {
+	if l := cal.GetCalendars("Chance"); l != nil {
 		return &ListResolver{l}
 	}
 	return nil

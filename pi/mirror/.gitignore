@@ -62,8 +62,9 @@ Temporary Items
 
 # Ignore all modules except the default modules.
 /modules/**
-!/modules/Google-Cal
+!/modules/google-cal
 !/modules/default
+!/modules/MMM-Facial-Recognition
 !/modules/default/**
 !/modules/README.md**
 

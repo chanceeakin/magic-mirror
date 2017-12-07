@@ -14,7 +14,7 @@ func CalendarHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	calID := "primary"
 	values := calendar.CalFunc(calID)
-	calendar.GetCalendars()
+	calendar.GetCalendars("Chance")
 
 	if values == nil {
 		val := map[string]string{"result": "no events found!"}

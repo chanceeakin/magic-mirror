@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"time"
 
 	"golang.org/x/net/context"
@@ -20,8 +21,8 @@ import (
 
 // getClient uses a Context and Config to retrieve a Token
 // then generate a Client. It returns the generated Client.
-func getClient(ctx context.Context, config *oauth2.Config) *http.Client {
-	cacheFile, err := tokenCacheFile()
+func getClient(ctx context.Context, config *oauth2.Config, name string) *http.Client {
+	cacheFile, err := tokenCacheFile(name)
 	if err != nil {
 		log.Fatalf("Unable to get path to cached credential file. %v", err)
 	}
@@ -54,15 +55,22 @@ func getTokenFromWeb(config *oauth2.Config) *oauth2.Token {
 
 // tokenCacheFile generates credential file path/filename.
 // It returns the generated credential path/filename.
-func tokenCacheFile() (string, error) {
+func tokenCacheFile(name string) (string, error) {
+	match, _ := regexp.MatchString("([a-zA-Z])", name)
+	var fileName string
+	fileName = "magic-mirror-creds-" + name + ".json"
+	if match != true {
+		fileName = "bad-user.json"
+	}
 	usr, err := user.Current()
 	if err != nil {
 		return "", err
 	}
 	tokenCacheDir := filepath.Join(usr.HomeDir, ".credentials")
 	os.MkdirAll(tokenCacheDir, 0700)
+
 	return filepath.Join(tokenCacheDir,
-		url.QueryEscape("calendar-go-quickstart.json")), err
+		url.QueryEscape(fileName)), err
 }
 
 // tokenFromFile retrieves a Token from a given file path.
@@ -103,10 +111,10 @@ func CalFunc(calID string) *calendar.Events {
 	// at ~/.credentials/calendar-go-quickstart.json
 	config, err := google.ConfigFromJSON(b, calendar.CalendarReadonlyScope)
 	if err != nil {
-		fmt.Println("Well, this is a surprise")
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	client := getClient(ctx, config)
+	name := "Chance"
+	client := getClient(ctx, config, name)
 
 	srv, err := calendar.New(client)
 	if err != nil {
@@ -128,7 +136,8 @@ func CalFunc(calID string) *calendar.Events {
 }
 
 // GetCalendars grabs a users' calendars
-func GetCalendars() *calendar.CalendarList {
+func GetCalendars(name string) *calendar.CalendarList {
+	fmt.Print(name)
 	ctx := context.Background()
 
 	b, err := ioutil.ReadFile("./keys/client_secret.json")
@@ -142,7 +151,7 @@ func GetCalendars() *calendar.CalendarList {
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	client := getClient(ctx, config)
+	client := getClient(ctx, config, name)
 
 	srv, err := calendar.New(client)
 	if err != nil {
