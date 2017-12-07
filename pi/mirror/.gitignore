@@ -61,12 +61,6 @@ Temporary Items
 !/modules/node_helper/**
 
 # Ignore all modules except the default modules.
-/modules/**
-!/modules/MMM-Facial-Recognition
-!/modules/google-cal
-!/modules/default
-!/modules/default/**
-!/modules/README.md**
 
 # Ignore changes to the custom css files.
 /css/custom.css

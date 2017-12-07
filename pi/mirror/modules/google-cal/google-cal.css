@@ -1,0 +1,40 @@
+/*
+ *
+ * google-cal
+ *
+ * {{AUTHOR_NAME}}
+ * {{LICENSE}} Licensed.
+ *
+ * Custom here your css module
+ *
+ */
+.google-cal {
+  margin: 0;
+}
+
+.g-cal {
+  margin: 0;
+  padding: 0;
+}
+
+.g-cal-header {
+  font-weight: 300;
+  margin: 0;
+}
+
+.g-cal-hr {
+  margin: 0.1em;
+}
+
+.g-cal-title {
+  line-height: 1em;
+  margin: 0;
+  padding: 0.2em 0;
+}
+
+.g-cal p {
+  font-size: 0.5em;
+  line-height: 1em;
+  margin: 0;
+  padding: 0.1em;
+}
