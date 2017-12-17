@@ -27,34 +27,26 @@ const styles = theme => ({
   }
 })
 
-function SignupForm (props) {
+const required = value => (value ? undefined : 'Required')
+const alphaNumeric = value =>
+  value && /[^a-zA-Z0-9]/i.test(value)
+    ? 'Only alphanumeric characters'
+    : undefined
+
+function RecorderForm (props) {
   const { handleSubmit, pristine, reset, submitting } = props
   return (
     <Card className={props.classes.root}>
       <CardContent>
         <form onSubmit={handleSubmit}>
+          <Typography>Add a name to save for your magic mirror account!</Typography>
           <div>
             <Field
-              name='username'
+              name='name'
               component={TextFieldComponent}
               type='text'
-              label='User Name'
-            />
-          </div>
-          <div>
-            <Field
-              name='email'
-              component={TextFieldComponent}
-              type='email'
-              label='Email'
-            />
-          </div>
-          <div>
-            <Field
-              name='password'
-              type='password'
-              component={TextFieldComponent}
-              label='Password'
+              label='Name'
+              validate={[required, alphaNumeric]}
             />
           </div>
           <div className={props.classes.buttonContainer}>
@@ -64,19 +56,19 @@ function SignupForm (props) {
               color='primary'
               raised
             >
-              Sign Up
+              Save Info
             </Button>
             <Button
               type='button'
               disabled={pristine || submitting}
               onClick={reset}
             >
-              Clear Values
+              Clear Value
             </Button>
           </div>
         </form>
         <a
-          onTouchTap={() => props.homePage()}
+          onTouchTap={props.homePage}
           className={props.classes.link}
         ><Typography>Home</Typography></a>
       </CardContent>
@@ -84,8 +76,8 @@ function SignupForm (props) {
   )
 }
 
-SignupForm.displayName = 'Signup-Form'
-SignupForm.propTypes = {
+RecorderForm.displayName = 'Recorder-Form'
+RecorderForm.propTypes = {
   classes: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
@@ -95,5 +87,5 @@ SignupForm.propTypes = {
 }
 
 export default withStyles(styles)(reduxForm({
-  form: 'signup' // a unique identifier for this form
-})(SignupForm))
+  form: 'recorder' // a unique identifier for this form
+})(RecorderForm))

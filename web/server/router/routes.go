@@ -7,11 +7,29 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
+	"log"
 	"net/http"
 	"time"
 )
 
 var schema *graphql.Schema
+
+type appHandler func(http.ResponseWriter, *http.Request) *AppError
+
+// AppError is the struct for an error message.
+type AppError struct {
+	Err     error
+	Message string
+	Code    int
+}
+
+// serveHTTP formats and passes up an error
+func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if e := fn(w, r); e != nil { // e is *appError, not os.Error.
+		log.Println(e.Err)
+		http.Error(w, e.Message, e.Code)
+	}
+}
 
 func init() {
 	schema = graphql.MustParseSchema(gql.Schema, &gql.Resolver{})
@@ -35,7 +53,8 @@ func NewRouter() *http.Server {
 	router.HandleFunc("/api/login", LoginHandler)
 	router.HandleFunc("/api/calendar", CalendarHandler)
 	router.HandleFunc("/api/logout", LogoutHandler)
-	router.HandleFunc("/auth", AuthHandler)
+	router.HandleFunc("/api/oauth", OAuthHandler)
+	router.Handle("/auth", appHandler(AuthRedirectHandler))
 	router.Handle("/graphql", &relay.Handler{Schema: schema})
 	router.HandleFunc("/make", TokenHandler)
 	// this is how create react app works and does client side rendering in GoLang. WTF.

@@ -10,6 +10,7 @@ import asyncComponent from './../components/Async-Component'
 const Splash = asyncComponent(() => import('./../containers/Splash'))
 const Signup = asyncComponent(() => import('./../containers/Signup'))
 const Home = asyncComponent(() => import('./../containers/Home'))
+const Recorder = asyncComponent(() => import('./../containers/Record-Info'))
 const Async404 = asyncComponent(() => import('./../containers/404Page'))
 
 const AuthedHome = ({ component: Component, isUserAuthed, ...rest }) => (
@@ -40,6 +41,10 @@ const Routes = ({match, childProps, isUserAuthed}) => (
       path={'/home'}
       component={Home}
       isUserAuthed={isUserAuthed}
+    />
+    <Route
+      path={'/save-info'}
+      component={Recorder}
     />
     <Route
       path={'*'}

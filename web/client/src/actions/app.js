@@ -10,7 +10,10 @@ import {
   BEGIN_QUERY,
   FAILED_REQUEST,
   SUCCESSFUL_REQUEST,
-  APP_BAR_CHECK
+  APP_BAR_CHECK,
+  RECORD_QUERY_BEGIN,
+  RECORD_QUERY_SUCCESS,
+  RECORD_QUERY_FAIL
 } from './../constants/action-types'
 import {authedHomePage} from './nav'
 
@@ -200,5 +203,30 @@ export const checkAppBar = payload => {
         payload: false
       })
     }
+  }
+}
+
+export const handleRecordSubmit = payload => {
+  console.log(payload)
+  return dispatch => {
+    dispatch({
+      type: RECORD_QUERY_BEGIN
+    })
+  }
+}
+
+export const recordQuerySuccess = () => {
+  return dispatch => {
+    dispatch({
+      type: RECORD_QUERY_SUCCESS
+    })
+  }
+}
+
+export const recordQueryFail = () => {
+  return dispatch => {
+    dispatch({
+      type: RECORD_QUERY_FAIL
+    })
   }
 }

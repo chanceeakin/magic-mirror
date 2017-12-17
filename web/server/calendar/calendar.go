@@ -19,24 +19,25 @@ import (
 	"google.golang.org/api/calendar/v3"
 )
 
-// getClient uses a Context and Config to retrieve a Token
+// GetClient uses a Context and Config to retrieve a Token
 // then generate a Client. It returns the generated Client.
-func getClient(ctx context.Context, config *oauth2.Config, name string) *http.Client {
-	cacheFile, err := tokenCacheFile(name)
+func GetClient(ctx context.Context, config *oauth2.Config, name string) *http.Client {
+	cacheFile, err := TokenCacheFile(name)
 	if err != nil {
 		log.Fatalf("Unable to get path to cached credential file. %v", err)
 	}
 	tok, err := tokenFromFile(cacheFile)
 	if err != nil {
-		tok = getTokenFromWeb(config)
-		saveToken(cacheFile, tok)
+		tok = GetTokenFromWeb(config)
+		SaveToken(cacheFile, tok)
 	}
 	return config.Client(ctx, tok)
 }
 
-// getTokenFromWeb uses Config to request a Token.
+// GetTokenFromWeb uses Config to request a Token.
 // It returns the retrieved Token.
-func getTokenFromWeb(config *oauth2.Config) *oauth2.Token {
+// TODO build the functionality of token saving into the existing oauth connection in oauth/oauth.go
+func GetTokenFromWeb(config *oauth2.Config) *oauth2.Token {
 	authURL := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 	fmt.Printf("Go to the following link in your browser then type the "+
 		"authorization code: \n%v\n", authURL)
@@ -53,9 +54,9 @@ func getTokenFromWeb(config *oauth2.Config) *oauth2.Token {
 	return tok
 }
 
-// tokenCacheFile generates credential file path/filename.
+// TokenCacheFile generates credential file path/filename.
 // It returns the generated credential path/filename.
-func tokenCacheFile(name string) (string, error) {
+func TokenCacheFile(name string) (string, error) {
 	match, _ := regexp.MatchString("([a-zA-Z])", name)
 	var fileName string
 	fileName = "magic-mirror-creds-" + name + ".json"
@@ -86,9 +87,9 @@ func tokenFromFile(file string) (*oauth2.Token, error) {
 	return t, err
 }
 
-// saveToken uses a file path to create a file and store the
+// SaveToken uses a file path to create a file and store the
 // token in it.
-func saveToken(file string, token *oauth2.Token) {
+func SaveToken(file string, token *oauth2.Token) {
 	fmt.Printf("Saving credential file to: %s\n", file)
 	f, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
@@ -102,7 +103,7 @@ func saveToken(file string, token *oauth2.Token) {
 func CalFunc(calID string) *calendar.Events {
 	ctx := context.Background()
 
-	b, err := ioutil.ReadFile("./keys/client_secret.json")
+	b, err := ioutil.ReadFile("./keys/old_client_secret.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
@@ -114,7 +115,7 @@ func CalFunc(calID string) *calendar.Events {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
 	name := "Chance"
-	client := getClient(ctx, config, name)
+	client := GetClient(ctx, config, name)
 
 	srv, err := calendar.New(client)
 	if err != nil {
@@ -137,10 +138,9 @@ func CalFunc(calID string) *calendar.Events {
 
 // GetCalendars grabs a users' calendars
 func GetCalendars(name string) *calendar.CalendarList {
-	fmt.Print(name)
 	ctx := context.Background()
 
-	b, err := ioutil.ReadFile("./keys/client_secret.json")
+	b, err := ioutil.ReadFile("./keys/old_client_secret.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
@@ -151,7 +151,7 @@ func GetCalendars(name string) *calendar.CalendarList {
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	client := getClient(ctx, config, name)
+	client := GetClient(ctx, config, name)
 
 	srv, err := calendar.New(client)
 	if err != nil {
