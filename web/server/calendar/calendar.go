@@ -1,3 +1,4 @@
+// Package calendar contains google calendar oauth interactions.
 package calendar
 
 import (

@@ -1,6 +1,6 @@
 package graphql
 
-// Page is boilerplate for graphql
+// Page is boilerplate for graphiql
 var Page = []byte(`
 <!DOCTYPE html>
 <html>

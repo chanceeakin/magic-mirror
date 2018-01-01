@@ -102,7 +102,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonVal)
 }
 
-// Signup function
+// SignupHandler takes care of sign ups!
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	db := Connect()
 	defer db.Close()

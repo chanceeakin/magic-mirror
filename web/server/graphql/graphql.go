@@ -1,6 +1,4 @@
-// Package graphql starwars provides a example schema and resolver based on Star Wars characters.
-//
-// Source: https://github.com/graphql/graphql.github.io/blob/source/site/_core/swapiSchema.js
+// Package graphql contains the graphql resolvers.
 package graphql
 
 import (

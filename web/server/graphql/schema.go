@@ -1,6 +1,6 @@
 package graphql
 
-// Schema is the graphql schema in text form.
+// Schema is the graphql schema in string form.
 var Schema = `
 	schema {
 		query: Query

@@ -8,6 +8,7 @@ import (
 
 func main() {
 	r := router.NewRouter()
-	fmt.Println("listening on :8000")
+	fmt.Println("Magic Mirror Golang Server running")
+	fmt.Println("and listening on :8000")
 	log.Fatal(r.ListenAndServe())
 }

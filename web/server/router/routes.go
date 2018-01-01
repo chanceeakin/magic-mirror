@@ -58,6 +58,7 @@ func NewRouter() *http.Server {
 	router.Handle("/graphql", &relay.Handler{Schema: schema})
 	router.HandleFunc("/make", TokenHandler)
 	// this is how create react app works and does client side rendering in GoLang. WTF.
+	// in retrospect, there's probably (certainly) a better way.
 	router.PathPrefix("/static").Handler(http.FileServer(http.Dir(static)))
 	router.PathPrefix("/favicon.ico").HandlerFunc(FileHandler(favicon))
 	router.PathPrefix("/service-worker.js").HandlerFunc(FileHandler(serviceWorker))
