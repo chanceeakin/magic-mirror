@@ -49,14 +49,10 @@ func NewRouter() *http.Server {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/graphiql", graphIQL)
-	router.HandleFunc("/api/signup", SignupHandler)
-	router.HandleFunc("/api/login", LoginHandler)
 	router.HandleFunc("/api/calendar", CalendarHandler)
-	router.HandleFunc("/api/logout", LogoutHandler)
 	router.HandleFunc("/api/oauth", OAuthHandler)
 	router.Handle("/auth", appHandler(AuthRedirectHandler))
 	router.Handle("/graphql", &relay.Handler{Schema: schema})
-	router.HandleFunc("/make", TokenHandler)
 	// this is how create react app works and does client side rendering in GoLang. WTF.
 	// in retrospect, there's probably (certainly) a better way.
 	router.PathPrefix("/static").Handler(http.FileServer(http.Dir(static)))
