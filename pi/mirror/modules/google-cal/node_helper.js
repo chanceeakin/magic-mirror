@@ -23,6 +23,9 @@ module.exports = NodeHelper.create({
 			// Send notification
 			this.sendNotificationTest(this.anotherFunction()); //Is possible send objects :)
 		}
+		if (notification === "user") {
+			console.log(payload);
+		}
 	},
 
 	// Example function send notification test

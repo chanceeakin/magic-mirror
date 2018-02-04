@@ -2,6 +2,7 @@ package router
 
 import (
 	"encoding/json"
+	"fmt"
 	calendar "github.com/chanceeakin/magic-mirror/web/server/calendar"
 	"net/http"
 )
@@ -12,9 +13,10 @@ func CalendarHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
+	fmt.Print(r)
 	calID := "primary"
-	values := calendar.CalFunc(calID)
-	calendar.GetCalendars("Chance")
+	values := calendar.CalFunc("Chance.eakin@gmail.com", calID)
+	calendar.GetCalendars("Chance.eakin@gmail.com")
 
 	if values == nil {
 		val := map[string]string{"result": "no events found!"}

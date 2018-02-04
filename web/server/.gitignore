@@ -21,3 +21,4 @@ keys/
 keys/client_secret.json
 
 vendor/
+server

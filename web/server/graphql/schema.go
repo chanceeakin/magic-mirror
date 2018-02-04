@@ -7,8 +7,8 @@ var Schema = `
 	}
 	type Query {
 		hello: String!
-		calendar(calID: String!): Calendar
-		calendarList: CalendarList
+		calendar(email: String!, calID: String!): Calendar
+		calendarList(email: String!): CalendarList
 	}
 	type Calendar {
 		title: String!

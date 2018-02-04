@@ -84,7 +84,7 @@ Module.register("google-cal", {
 	 * [getCals grabs all the calendars]
 	 * @return {Promise} [description]
 	 */
-	async getCals () {
+	async getCals (name) {
 		var self = this;
 		var savedCals = []
 		try {
@@ -95,7 +95,7 @@ Module.register("google-cal", {
 					Accept: "application/json"
 				},
 				body: JSON.stringify({
-					query: `query CalList {
+					query: `query CalList(email: ${name}) {
 						calendarList {
 							listItems {
 								summary
@@ -130,10 +130,10 @@ Module.register("google-cal", {
 	 * @param  {[type]}  calID [description]
 	 * @return {Promise}       [description]
 	 */
-	async getCal (calID) {
+	async getCal (email, calID) {
 		try {
-			const query = `query GetCal($calID: String!) {
-				calendar(calID: $calID) {
+			const query = `query GetCal($calID: String!, $email: String!) {
+				calendar(calID: $calID, email: $email) {
 					title
 					timezone
 					items {
@@ -159,7 +159,8 @@ Module.register("google-cal", {
 				body: JSON.stringify({
 					query: query,
 					variables: {
-						calID
+						calID,
+						email
 					}
 				})
 			})

@@ -94,16 +94,19 @@ func (r *EventDateTimeResolver) TimeZone() string {
 }
 
 // Calendar is the endpoint for your daily calendar delivery
-func (r *Resolver) Calendar(args struct{ CalID string }) *CalendarResolver {
-	if c := cal.CalFunc(args.CalID); c != nil {
+func (r *Resolver) Calendar(args struct {
+	Email string
+	CalID string
+}) *CalendarResolver {
+	if c := cal.CalFunc(args.Email, args.CalID); c != nil {
 		return &CalendarResolver{c}
 	}
 	return nil
 }
 
 // CalendarList returns a list of calendars
-func (r *Resolver) CalendarList() *ListResolver {
-	if l := cal.GetCalendars("Chance"); l != nil {
+func (r *Resolver) CalendarList(args struct{ Email string }) *ListResolver {
+	if l := cal.GetCalendars(args.Email); l != nil {
 		return &ListResolver{l}
 	}
 	return nil
