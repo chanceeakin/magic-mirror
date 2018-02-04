@@ -34,7 +34,7 @@ var Config *oauth2.Config
 
 func init() {
 	var c credentials
-	secrets, err := ioutil.ReadFile("./keys/client_secret.json")
+	secrets, err := ioutil.ReadFile("./keys/plus_client_secret.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}

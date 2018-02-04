@@ -21,6 +21,7 @@ import face
 import cv2
 import config
 import signal
+import logging
 
 def to_node(type, message):
     # convert to json and print (node helper will read from stdout)

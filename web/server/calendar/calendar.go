@@ -16,7 +16,7 @@ import (
 func CalFunc(calID string) *calendar.Events {
 	ctx := context.Background()
 
-	b, err := ioutil.ReadFile("./keys/old_client_secret.json")
+	b, err := ioutil.ReadFile("./keys/calendar_secret.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
@@ -27,7 +27,7 @@ func CalFunc(calID string) *calendar.Events {
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	name := "Chance"
+	name := "chance.eakin@gmail.com"
 	client := customOAuth.GetClient(ctx, config, name)
 
 	srv, err := calendar.New(client)
@@ -53,7 +53,7 @@ func CalFunc(calID string) *calendar.Events {
 func GetCalendars(name string) *calendar.CalendarList {
 	ctx := context.Background()
 
-	b, err := ioutil.ReadFile("./keys/old_client_secret.json")
+	b, err := ioutil.ReadFile("./keys/calendar_secret.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
