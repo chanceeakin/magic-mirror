@@ -97,19 +97,28 @@ func (r *EventDateTimeResolver) TimeZone() string {
 func (r *Resolver) Calendar(args struct {
 	Email string
 	CalID string
-}) *CalendarResolver {
-	if c := cal.CalFunc(args.Email, args.CalID); c != nil {
-		return &CalendarResolver{c}
+}) (*CalendarResolver, error) {
+	c, err := cal.CalFunc(args.Email, args.CalID)
+	if err != nil {
+		return nil, err
 	}
-	return nil
+
+	if c != nil {
+		return &CalendarResolver{c}, nil
+	}
+	return nil, nil
 }
 
 // CalendarList returns a list of calendars
-func (r *Resolver) CalendarList(args struct{ Email string }) *ListResolver {
-	if l := cal.GetCalendars(args.Email); l != nil {
-		return &ListResolver{l}
+func (r *Resolver) CalendarList(args struct{ Email string }) (*ListResolver, error) {
+	l, err := cal.GetCalendars(args.Email)
+	if err != nil {
+		return nil, err
 	}
-	return nil
+	if l != nil {
+		return &ListResolver{l}, nil
+	}
+	return nil, nil
 }
 
 // ListItems lists the items in the calendar list. Holy crap that's a lot of redundant words.

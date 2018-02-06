@@ -15,7 +15,10 @@ func CalendarHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Print(r)
 	calID := "primary"
-	values := calendar.CalFunc("Chance.eakin@gmail.com", calID)
+	values, err := calendar.CalFunc("Chance.eakin@gmail.com", calID)
+	if err != nil {
+		panic(err)
+	}
 	calendar.GetCalendars("Chance.eakin@gmail.com")
 
 	if values == nil {

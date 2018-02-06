@@ -14,10 +14,9 @@ import (
 )
 
 // CalFunc takes the place of main.
-func CalFunc(email string, calID string) *calendar.Events {
+func CalFunc(email string, calID string) (*calendar.Events, error) {
 	ctx := context.Background()
 
-	fmt.Print(email, calID)
 	b, err := ioutil.ReadFile("./keys/old_client_secret.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
@@ -27,32 +26,33 @@ func CalFunc(email string, calID string) *calendar.Events {
 	// at ~/.credentials/calendar-go-quickstart.json
 	config, err := google.ConfigFromJSON(b, calendar.CalendarReadonlyScope)
 	if err != nil {
-		log.Fatalf("Unable to parse client secret file to config: %v", err)
+		return nil, fmt.Errorf("Unable to parse client secret file to config: %s", err)
 	}
 	name := email
 	client := customOAuth.GetClient(ctx, config, name)
 
 	srv, err := calendar.New(client)
 	if err != nil {
-		log.Fatalf("Unable to retrieve calendar Client %v", err)
+		return nil, fmt.Errorf("Unable to retrieve calendar Client %s", err)
 	}
 
 	t := time.Now()
 	maxT := t.AddDate(0, 0, 1)
 	events, err := srv.Events.List(calID).ShowDeleted(false).
 		SingleEvents(true).TimeMin(t.Format(time.RFC3339)).TimeMax(maxT.Format(time.RFC3339)).MaxResults(10).OrderBy("startTime").Do()
+
 	if err != nil {
-		log.Fatalf("Unable to retrieve next ten of the user's events. %v", err)
+		return nil, fmt.Errorf("Unable to retrieve next ten of the user's events. %s", err)
 	}
 
 	if len(events.Items) > 0 {
-		return events
+		return events, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // GetCalendars grabs a users' calendars
-func GetCalendars(name string) *calendar.CalendarList {
+func GetCalendars(name string) (*calendar.CalendarList, error) {
 	ctx := context.Background()
 
 	b, err := ioutil.ReadFile("./keys/old_client_secret.json")
@@ -64,21 +64,21 @@ func GetCalendars(name string) *calendar.CalendarList {
 	// at ~/.credentials/calendar-go-quickstart.json
 	config, err := google.ConfigFromJSON(b, calendar.CalendarReadonlyScope)
 	if err != nil {
-		log.Fatalf("Unable to parse client secret file to config: %v", err)
+		return nil, fmt.Errorf("Unable to parse client secret file to config: %s", err)
 	}
 	client := customOAuth.GetClient(ctx, config, name)
 
 	srv, err := calendar.New(client)
 	if err != nil {
-		log.Fatalf("Unable to retrieve calendar Client %v", err)
+		return nil, fmt.Errorf("Unable to retrieve calendar Client %v", err)
 	}
 
 	listRes, err := srv.CalendarList.List().Fields("items").Do()
 	if err != nil {
-		log.Fatalf("Unable to retrieve list of calendars: %v", err)
+		return nil, fmt.Errorf("Unable to retrieve list of calendars: %s", err)
 	}
 	if len(listRes.Items) > 0 {
-		return listRes
+		return listRes, nil
 	}
-	return nil
+	return nil, nil
 }

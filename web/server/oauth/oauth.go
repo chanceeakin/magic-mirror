@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
@@ -16,6 +17,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"regexp"
+	"time"
 )
 
 type credentials struct {
@@ -30,6 +32,7 @@ func RandToken(l int) string {
 	return base64.StdEncoding.EncodeToString(b)
 }
 
+// Config is the configuration object for the OAuth 2 protocol.
 var Config *oauth2.Config
 
 func init() {
@@ -44,7 +47,7 @@ func init() {
 	Config = configInit()
 }
 
-// OauthStateString is a random token
+// OauthStateString is a randomly generated token.
 var OauthStateString = RandToken(32)
 
 func configInit() *oauth2.Config {
@@ -73,7 +76,10 @@ func GetClient(ctx context.Context, Config *oauth2.Config, name string) *http.Cl
 	}
 	tok, err := tokenFromFile(cacheFile)
 	if err != nil {
-		tok = GetTokenFromWeb(Config)
+		tok, err = GetTokenFromWeb(Config)
+		if err != nil {
+			return nil
+		}
 		SaveToken(cacheFile, tok)
 	}
 	return Config.Client(ctx, tok)
@@ -82,10 +88,24 @@ func GetClient(ctx context.Context, Config *oauth2.Config, name string) *http.Cl
 // GetTokenFromWeb uses Config to request a Token.
 // It returns the retrieved Token.
 // TODO build the functionality of token saving into the existing oauth connection in oauth/oauth.go
-func GetTokenFromWeb(Config *oauth2.Config) *oauth2.Token {
+func GetTokenFromWeb(Config *oauth2.Config) (*oauth2.Token, error) {
 	authURL := Config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 	fmt.Printf("Go to the following link in your browser then type the "+
 		"authorization code: \n%v\n", authURL)
+
+	moveOn := make(chan bool)
+
+	go func() {
+		time.Sleep(time.Second * 30)
+		moveOn <- true
+	}()
+
+	select {
+	case <-moveOn:
+		return nil, errors.New("Looks like you didn't move fast enough")
+	case <-time.After(time.Second * 31):
+		fmt.Print("This code will never be touched")
+	}
 
 	var code string
 	if _, err := fmt.Scan(&code); err != nil {
@@ -94,9 +114,9 @@ func GetTokenFromWeb(Config *oauth2.Config) *oauth2.Token {
 
 	tok, err := Config.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		log.Fatalf("Unable to retrieve token from web %v", err)
+		return nil, fmt.Errorf("Unable to retrieve token from web %s", err)
 	}
-	return tok
+	return tok, nil
 }
 
 // TokenCacheFile generates credential file path/filename.
