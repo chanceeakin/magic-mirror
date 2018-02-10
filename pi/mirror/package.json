@@ -46,6 +46,7 @@
     "time-grunt": "latest"
   },
   "dependencies": {
+    "babel-cli": "6.26.0",
     "body-parser": "^1.17.2",
     "colors": "^1.1.2",
     "electron": "1.7.12",

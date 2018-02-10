@@ -43,13 +43,16 @@ Module.register("google-cal", {
 	 * get a URL request
 	 *
 	 */
-	 async getData() {
+	 async getData(email) {
 		var self = this;
 		var retry = true;
 
 		// var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
 		try {
-			const data = await self.getCals()
+			if (!email) {
+				throw new Error("no email")
+			}
+			const data = await self.getCals(email)
 			self.processData(data)
 		} catch (e) {
 			console.error(e)
@@ -84,9 +87,18 @@ Module.register("google-cal", {
 	 * [getCals grabs all the calendars]
 	 * @return {Promise} [description]
 	 */
-	async getCals (name) {
+	async getCals (email) {
 		var self = this;
 		var savedCals = []
+		const query = `query calList($email: String!) {
+			calendarList(email: $email) {
+				listItems {
+					summary
+					Primary
+					id
+				}
+			}
+		}`
 		try {
 			let calList = await fetch("http://localhost:8000/graphql", {
 				method: "POST",
@@ -95,29 +107,28 @@ Module.register("google-cal", {
 					Accept: "application/json"
 				},
 				body: JSON.stringify({
-					query: `query CalList(email: ${name}) {
-						calendarList {
-							listItems {
-								summary
-								Primary
-								id
-							}
-						}
-					}`
+					query: query,
+					variables: {
+						email: email
+					}
 				})
 			})
 			calList = await calList.json()
 			savedCals = await self.defaults.calendars.map(cal => {
-				const sc = calList.data.calendarList.listItems.filter(fil => fil.summary === cal)
+				const sc = calList.data.calendarList && calList.data.calendarList.listItems ?
+					calList.data.calendarList.listItems.filter(fil => fil.summary === cal)
+					: undefined
 				if (sc) {
+					console.log("sc!!!!!!!!!!!", sc);
 					if (sc[0].Primary) {
 						return "primary"
 					}
 					return sc[0].id
 				}
 			})
+			console.log("SAVED CALLLLLS!", savedCals);
 			const promCalls = savedCals.map(cal => {
-				return self.getCal(cal)
+				return self.getCal(email, cal)
 			})
 			let promises = await Promise.all(promCalls)
 			return promises
@@ -273,6 +284,16 @@ Module.register("google-cal", {
 			// set dataNotification
 			this.dataNotification = payload;
 			this.updateDom();
+		}
+	},
+
+	notificationReceived: function (notification, payload, sender) {
+		var that = this;
+		if (notification === "GOOGLE_CAL_CALL") {
+			if (payload === "Chance") {
+				console.log("hey man");
+				that.getData("Chance.eakin@gmail.com");
+			}
 		}
 	},
 });

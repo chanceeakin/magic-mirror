@@ -7,7 +7,7 @@
  * MIT Licensed.
  */
 
-Module.register('MMM-Facial-Recognition',{
+Module.register("MMM-Facial-Recognition",{
 
 	defaults: {
 		// 1=LBPH | 2=Fisher | 3=Eigen
@@ -22,7 +22,7 @@ Module.register('MMM-Facial-Recognition',{
 		// force the use of a usb webcam on raspberry pi (on other platforms this is always true automatically)
 		useUSBCam: false,
 		// Path to your training xml
-		trainingFile: 'modules/MMM-Facial-Recognition/training.xml',
+		trainingFile: "modules/MMM-Facial-Recognition/training.xml",
 		// recognition intervall in seconds (smaller number = faster but CPU intens!)
 		interval: 2,
 		// Logout delay after last recognition so that a user does not get instantly logged out if he turns away from the mirror for a few seconds
@@ -42,9 +42,9 @@ Module.register('MMM-Facial-Recognition',{
 		return {
 			en: "translations/en.json",
 			de: "translations/de.json",
-      			es: "translations/es.json",
-      			zh: "translations/zh.json",
-      			nl: "translations/nl.json",
+			es: "translations/es.json",
+			zh: "translations/zh.json",
+			nl: "translations/nl.json",
 			sv: "translations/sv.json",
 			fr: "translations/fr.json",
 			id: "translations/id.json"
@@ -53,17 +53,17 @@ Module.register('MMM-Facial-Recognition',{
 
 	login_user: function () {
 
-    var self = this;
+		var self = this;
 
 		MM.getModules().withClass(this.config.defaultClass).exceptWithClass(this.config.everyoneClass).enumerate(function(module) {
 			module.hide(1000, function() {
-				Log.log(module.name + ' is hidden.');
+				Log.log(module.name + " is hidden.");
 			}, {lockString: self.identifier});
 		});
 
 		MM.getModules().withClass(this.current_user).enumerate(function(module) {
 			module.show(1000, function() {
-				Log.log(module.name + ' is shown.');
+				Log.log(module.name + " is shown.");
 			}, {lockString: self.identifier});
 		});
 
@@ -71,17 +71,17 @@ Module.register('MMM-Facial-Recognition',{
 	},
 	logout_user: function () {
 
-    var self = this;
+		var self = this;
 
 		MM.getModules().withClass(this.current_user).enumerate(function(module) {
 			module.hide(1000, function() {
-				Log.log(module.name + ' is hidden.');
+				Log.log(module.name + " is hidden.");
 			}, {lockString: self.identifier});
 		});
 
 		MM.getModules().withClass(this.config.defaultClass).exceptWithClass(this.config.everyoneClass).enumerate(function(module) {
 			module.show(1000, function() {
-				Log.log(module.name + ' is shown.');
+				Log.log(module.name + " is shown.");
 			}, {lockString: self.identifier});
 		});
 
@@ -90,7 +90,7 @@ Module.register('MMM-Facial-Recognition',{
 
 	// Override socket notification handler.
 	socketNotificationReceived: function(notification, payload) {
-		if (payload.action == "login"){
+		if (payload.action === "login"){
 			if (this.current_user_id != payload.user){
 				this.logout_user()
 			}
@@ -101,6 +101,7 @@ Module.register('MMM-Facial-Recognition',{
 			else{
 				this.current_user = this.config.users[payload.user];
 				this.current_user_id = payload.user;
+				this.sendNotification("GOOGLE_CAL_CALL", this.config.users[payload.user])
 				this.login_user()
 			}
 
@@ -115,11 +116,11 @@ Module.register('MMM-Facial-Recognition',{
 	},
 
 	notificationReceived: function(notification, payload, sender) {
-		if (notification === 'DOM_OBJECTS_CREATED') {
-      var self = this;
+		if (notification === "DOM_OBJECTS_CREATED") {
+			var self = this;
 			MM.getModules().exceptWithClass("default").enumerate(function(module) {
 				module.hide(1000, function() {
-					Log.log('Module is hidden.');
+					Log.log("Module is hidden.");
 				}, {lockString: self.identifier});
 			});
 		}
@@ -127,8 +128,8 @@ Module.register('MMM-Facial-Recognition',{
 
 	start: function() {
 		this.current_user = null;
-		this.sendSocketNotification('CONFIG', this.config);
-		Log.info('Starting module: ' + this.name);
+		this.sendSocketNotification("CONFIG", this.config);
+		Log.info("Starting module: " + this.name);
 	}
 
 });
