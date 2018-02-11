@@ -37,13 +37,13 @@ var Config *oauth2.Config
 
 func init() {
 	var c credentials
-	secrets, err := ioutil.ReadFile("./keys/plus_client_secret.json")
+	secrets, err := ioutil.ReadFile("./keys/pi_go_time.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
 	json.Unmarshal(secrets, &c)
-	os.Setenv("googlekey", c.Cid)
-	os.Setenv("googlesecret", c.Csecret)
+	os.Setenv("GOOGLEKEY", c.Cid)
+	os.Setenv("GOOGLESECRET", c.Csecret)
 	Config = configInit()
 }
 
@@ -51,9 +51,11 @@ func init() {
 var OauthStateString = RandToken(32)
 
 func configInit() *oauth2.Config {
+	fmt.Print(os.Getenv("GOOGLEKEY"))
+	fmt.Print(os.Getenv("GOOGLESECRET"))
 	var c = &oauth2.Config{
-		ClientID:     os.Getenv("googlekey"),
-		ClientSecret: os.Getenv("googlesecret"),
+		ClientID:     os.Getenv("GOOGLEKEY"),
+		ClientSecret: os.Getenv("GOOGLESECRET"),
 		RedirectURL:  "http://localhost:8000/auth",
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.profile",
