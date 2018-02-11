@@ -4,7 +4,6 @@ package calendar
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"time"
 
 	customOAuth "github.com/chanceeakin/magic-mirror/web/server/oauth"
@@ -19,7 +18,7 @@ func CalFunc(email string, calID string) (*calendar.Events, error) {
 
 	b, err := ioutil.ReadFile("./keys/old_client_secret.json")
 	if err != nil {
-		log.Fatalf("Unable to read client secret file: %v", err)
+		return nil, fmt.Errorf("Unable to read client secret file: %s", err)
 	}
 
 	// If modifying these scopes, delete your previously saved credentials
@@ -57,7 +56,7 @@ func GetCalendars(name string) (*calendar.CalendarList, error) {
 
 	b, err := ioutil.ReadFile("./keys/old_client_secret.json")
 	if err != nil {
-		log.Fatalf("Unable to read client secret file: %v", err)
+		return nil, fmt.Errorf("Unable to read client secret file: %s", err)
 	}
 
 	// If modifying these scopes, delete your previously saved credentials
